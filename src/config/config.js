@@ -6,7 +6,6 @@ export const environment = {
         serverURL : `http://localhost:${PORT}`,
         dbString : process.env.MONGO_SRV
     }
-}
 console.log("Environment Configuration")
 console.log(environment)
 console.log("Environment Configuration")
