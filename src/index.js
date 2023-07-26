@@ -11,12 +11,12 @@ async function startServer() {
     const app = express();
     server.applyMiddleware({ app });
     app.get('/', (req, res) => {
-        console.log("Apollo GraphQL Express server is ready");
-        res.send("GQL Ready")
+        console.log("Apollo GraphQL Express server is ready. This is REST Endpoint, currently under build.");
+        res.send(`Apollo GraphQL x Express server is ready. This is REST Endpoint, currently under development. Graphql Server running at http://localhost:${PORT}${server.graphqlPath}`)
     });
 
     app.listen({ port: PORT }, () =>
-        console.log(`Server running at http://localhost:${PORT}${server.graphqlPath}`)
+        console.log(`Graphql Server running at http://localhost:${PORT}${server.graphqlPath}`)
     );
 }
 
