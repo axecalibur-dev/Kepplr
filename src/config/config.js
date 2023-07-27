@@ -3,10 +3,11 @@ dotenv.config()
 export const PORT = process.env.PORT
 export const environment = {
     development: {
-        "serverURL": `http://localhost:${PORT}`,
-        "serverURL(REST)": `http://localhost:${PORT}`,
-        "serverURL(GraphQL)": `http://localhost:${PORT}/graphql`,
         "dbString": process.env.MONGO_SRV
+    },
+
+    production : {
+
     }
 }
 console.log("Environment Configuration")

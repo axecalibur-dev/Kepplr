@@ -1,22 +1,31 @@
 import {gql} from 'apollo-server-express'
 
-export const typeDefs = gql`
+const typeDefs = gql`
+    
+    scalar JSON_TYPE
+    enum Gender{
+        MALE
+        FEMALE
+        OTHER
+    }
+
+    type Contact{
+        firstName:String
+        lastName:String
+    }
     
     type Friend{
         id:ID
         firstName:String
         lastName:String
-#        gender:Gender
+        gender:Gender
         language:String
         age:Int
         email: String
-#        contacts:[Contact]
+        contacts:[Contact]
     }
 
-#    type Contact{
-#        firstName:String
-#        lastName:String
-#    }
+
 
 #    type Series {
 #        id:ID
@@ -30,12 +39,7 @@ export const typeDefs = gql`
 #        TWO
 #        THREE
 #    }
-
-#    enum Gender{
-#        MALE
-#        FEMALE
-#        OTHER
-#    }
+    
 
 #    input SeriesInput{
 #        id:ID
@@ -44,32 +48,36 @@ export const typeDefs = gql`
 #        rating:Rating
 #    }
 
+    input ContactInput{
+        firstName:String
+        lastName:String
+    }
+
     input FriendRequestDTO{
         id:ID
         firstName:String
         lastName:String
-#        gender:Gender
+        gender:Gender
         language:String
         age:Int
         email: String
-#        contacts:[ContactInput]
+        contacts:[ContactInput]
     }
 
-#    input ContactInput{
-#        firstName:String
-#        lastName:String
-#    }
+
 
     type QueryFriendResponse{
         message : String
         status : String
         data :[Friend]
+        meta:JSON_TYPE
     }
 
     type MutationFriendResponse{
         message : String
         status : String
         data :Friend
+        meta:JSON_TYPE
     }
 
     type Query{
@@ -89,3 +97,4 @@ export const typeDefs = gql`
 
 `;
 
+export default typeDefs;

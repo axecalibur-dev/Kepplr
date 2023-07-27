@@ -1,5 +1,8 @@
-import {Friends , Series} from "../db/dbConnector";
-const HttpStatus = require('http-status-codes');
+import { Friends } from "../db/dbConnector";
+import HttpStatus from 'http-status-codes';
+import Utils from "../Utils/utils";
+
+const UtilServices = new Utils();
 export const resolvers= {
     Query : {
         getAllFriend: async (parent) => {
@@ -10,13 +13,17 @@ export const resolvers= {
                     return {
                         "message":"No data found.",
                         "status":HttpStatus.NOT_FOUND,
-                        "data":null
+                        "data":null,
+                        "meta":{}
                     }
                 else{
                     return {
                         "message":"Friends found.",
                         "status":HttpStatus.OK,
-                        "data":current_friends
+                        "data":current_friends,
+                        "meta": {
+                            "count" : current_friends.length
+                        }
                     }
                 }
             }
@@ -25,7 +32,8 @@ export const resolvers= {
                 return {
                     "message":`An exception occurred.`,
                     "status":HttpStatus.BAD_REQUEST,
-                    "data":null
+                    "data":null,
+                    "meta":{}
                 }
             }
         },
@@ -83,15 +91,18 @@ export const resolvers= {
                 return {
                     "message":"Friend Created.",
                     "status":HttpStatus.CREATED,
-                    "data":current_friend
+                    "data":current_friend,
+                    "meta" : {}
                 }
             }
 
+
             catch(err){
                 return {
-                    "message":`An exception occurred.`,
+                    "message":UtilServices.format_error_message(err.message),
                     "status":HttpStatus.BAD_REQUEST,
-                    "data":null
+                    "data":null,
+                    "meta" : {}
                 }
             }
 
