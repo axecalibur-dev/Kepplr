@@ -16,6 +16,5 @@ mongoose.connect(environment[env].dbString , {
 })
 
 const Friends = mongoose.model("Friends",friendSchema)
-const Series = mongoose.model("Series",seriesSchema)
 
-export { Friends , Series}
+export { Friends }
