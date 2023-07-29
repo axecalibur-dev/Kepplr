@@ -1,6 +1,23 @@
 import mongoose from "mongoose";
 
 export const friendSchema = new mongoose.Schema({
+    created_at: {
+        type: Date,
+        default: Date.now,
+    },
+    updated_at: {
+        type: Date,
+        default: Date.now,
+    },
+    email : {
+        type : String,
+        required: true
+    },
+    password : {
+        type : String,
+        required: true
+    },
+
     firstName : {
         type : String,
         required: true
@@ -23,9 +40,7 @@ export const friendSchema = new mongoose.Schema({
     language : {
         type : String
     },
-    email : {
-        type : String
-    },
+
     contacts : {
         type : Array
     }

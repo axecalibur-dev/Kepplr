@@ -2,7 +2,7 @@ import {gql} from 'apollo-server-express'
 
 const typeDefs = gql`
     
-    scalar JSON_TYPE
+    scalar JSON_Object
     enum Gender{
         MALE
         FEMALE
@@ -24,29 +24,7 @@ const typeDefs = gql`
         email: String
         contacts:[Contact]
     }
-
-
-
-#    type Series {
-#        id:ID
-#        seriesName:String
-#        year:Int
-#        rating:Rating
-#    }
-
-#    enum Rating{
-#        ONE
-#        TWO
-#        THREE
-#    }
     
-
-#    input SeriesInput{
-#        id:ID
-#        seriesName:String
-#        year:Int
-#        rating:Rating
-#    }
 
     input ContactInput{
         firstName:String
@@ -64,37 +42,69 @@ const typeDefs = gql`
         contacts:[ContactInput]
     }
 
+    input SignupDTO{
+        id:ID
+        firstName:String
+        lastName:String
+        password : String!
+        gender:Gender
+        language:String
+        age:Int
+        email: String
+        contacts:[ContactInput]
+    }
+
 
 
     type QueryFriendResponse{
         message : String
         status : String
         data :[Friend]
-        meta:JSON_TYPE
+        meta:JSON_Object
+    }
+    
+    type SignupResponse{
+        message : String
+        status : String
+        refresh_token : JSON_Object
+        access_token : JSON_Object
+        data :[Friend]
+        meta:JSON_Object
     }
 
     type MutationFriendResponse{
         message : String
         status : String
         data :Friend
-        meta:JSON_TYPE
+        meta:JSON_Object
     }
-
+    
+    input Identity {
+        id : ID
+    }
+        
+    input LoginDTO {
+        email : String
+        password : String
+    }
+    
+    input TokenDTO {
+        refresh_token:String
+    }
+    
     type Query{
         getAllFriend:QueryFriendResponse
-        
-#        getAFriendByID:GenericFriendResponse
-#        findASeries(id:ID):Series
+        getAFriendByID(input:Identity):QueryFriendResponse
+        regenerate_token(input:TokenDTO):SignupResponse
     }
 
     type Mutation{
-        createFriend(input:FriendRequestDTO):MutationFriendResponse
         updateFriend(input:FriendRequestDTO):MutationFriendResponse
-#        addASeries(series:SeriesInput):Series
+        sign_up(input:SignupDTO):SignupResponse
+        login(input:LoginDTO):SignupResponse
+        
     }
-    
-    
-
+ 
 `;
 
 export default typeDefs;

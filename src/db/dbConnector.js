@@ -2,7 +2,6 @@ const mongoose = require("mongoose").default;
 const {environment} = require("../config/config")
 
 const {friendSchema } = require("./schema/friendSchema")
-const {seriesSchema } = require("./schema/seriesSchema")
 
 const env = "development"
 mongoose.connect(environment[env].dbString , {
