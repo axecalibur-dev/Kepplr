@@ -15,7 +15,7 @@ export const friendSchema = new mongoose.Schema({
     },
     password : {
         type : String,
-        required: true
+        default:null
     },
 
     requested_password_assistance : {
@@ -53,5 +53,24 @@ export const friendSchema = new mongoose.Schema({
 
     contacts : {
         type : Array
-    }
-});
+    },
+
+    registration_source : {
+        type: String,
+        enum: ['Google', 'Facebook', 'Email'],
+        required: true,
+        default:"Email",
+    },
+
+
+
+    oAuthCredentials: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {},
+    },
+
+    // {^^^^^^^^^ format for oAuthCredentials
+    //    "open_api_id" : "google"/"facebook"
+    // }
+
+}, { minimize: false })

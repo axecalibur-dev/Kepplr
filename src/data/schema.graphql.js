@@ -85,7 +85,7 @@ const typeDefs = gql`
         
     input LoginDTO {
         email : String
-        password : String
+        password : String!
     }
     
     input TokenDTO {
