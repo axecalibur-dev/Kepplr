@@ -28,6 +28,7 @@ async function startServer() {
 
     catch (err) {
         console.log("Cron Job Exception")
+        console.log("CRON ERROR : ")
         console.log(err)
     }
 
