@@ -18,6 +18,16 @@ export const friendSchema = new mongoose.Schema({
         required: true
     },
 
+    requested_password_assistance : {
+        type:Boolean,
+        default:false
+    },
+
+    password_request_otp : {
+        type:String,
+        default:null
+    },
+
     firstName : {
         type : String,
         required: true

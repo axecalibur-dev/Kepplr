@@ -92,6 +92,16 @@ const typeDefs = gql`
         refresh_token:String
     }
     
+    input ResetPasswordDTO {
+        email : String
+    }
+
+    input PasswordResetDTO {
+        password_request_otp : String
+        new_password : String
+        reenter_password : String
+    }
+    
     type Query{
         getAllFriend:QueryFriendResponse
         getAFriendByID(input:Identity):QueryFriendResponse
@@ -102,6 +112,8 @@ const typeDefs = gql`
         updateFriend(input:FriendRequestDTO):MutationFriendResponse
         sign_up(input:SignupDTO):SignupResponse
         login(input:LoginDTO):SignupResponse
+        reset_password(input:ResetPasswordDTO):MutationFriendResponse
+        set_password(input:PasswordResetDTO):MutationFriendResponse
         
     }
  

@@ -1,5 +1,10 @@
 import ControllerServices from "../db/services/controller_services";
+import Utils from "../utils/utils";
+import AuthServices from "../db/services/auth/auth_services";
 const Controller = new ControllerServices()
+
+const utils = new Utils();
+const auth = new AuthServices()
 export const resolvers = {
     Query : {
         getAllFriend: async (parent) => {
@@ -39,6 +44,14 @@ export const resolvers = {
             return Controller.login_user(
                 parent, {input}
             )
+        },
+
+        reset_password: (parent, {input}) =>{
+            return auth.reset_password(parent, {input})
+        },
+
+        set_password:(parent, {input}) =>{
+            return auth.initiate_reset_password_service(parent, {input})
         }
     },
 }
