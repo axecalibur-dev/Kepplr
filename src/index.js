@@ -23,6 +23,7 @@ async function startServer() {
 
     try {
         cronJob.start()
+        console.log("Kabadiwala incoming....")
         console.log("Cron Initiated")
     }
 
