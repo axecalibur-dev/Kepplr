@@ -125,5 +125,6 @@ class AuthServices {
             }
         }
     }
+
 }
 export default AuthServices;

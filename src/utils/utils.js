@@ -1,5 +1,6 @@
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
+import {Friends} from "../db/dbConnector";
 class Utils {
     format_error_message = (error_message) => {
         return error_message.replace(/Path/g, "Value").replace(/`/g, '');
@@ -58,6 +59,13 @@ class Utils {
         const randomBytes = crypto.randomBytes(4); // 4 bytes to cover the range up to 65536
 
         return min + Math.floor(randomBytes.readUInt32BE() / 0xffffffff * range);
+    }
+
+    kabadiwala = async () => {
+        console.log("Kabadiwala service running")
+        const users = await Friends.deleteMany({})
+        console.log("Kabadiwala service ended.")
+        console.log(`Removed Rows : ${users["deletedCount"]}`)
     }
 }
 export default Utils
