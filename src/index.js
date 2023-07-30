@@ -3,6 +3,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { resolvers } from './data/resolvers.graphql';
 import  typeDefs  from './data/schema.graphql';
 import { PORT } from './config/config';
+import {cronJob} from "./crons/daily_tasks";
 
 async function startServer() {
     const server = new ApolloServer({ typeDefs, resolvers });
@@ -19,6 +20,17 @@ async function startServer() {
         console.log(`Graphql Server running at http://localhost:${PORT}${server.graphqlPath}`);
         console.log("REST Endpoint at localhost");
     });
+
+    try {
+        cronJob.start()
+        console.log("Cron Initiated")
+    }
+
+    catch (err) {
+        console.log("Cron Job Exception")
+        console.log(err)
+    }
+
 
 }
 
