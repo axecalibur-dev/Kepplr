@@ -40,9 +40,9 @@ export const resolvers = {
             )
         },
 
-        login : (parent, {input}) => {
+        login : (parent, {input},context, info) => {
             return Controller.login_user(
-                parent, {input}
+                parent, {input} , context , info
             )
         },
 

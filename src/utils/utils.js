@@ -60,10 +60,10 @@ class Utils {
     }
 
     kabadiwala = async () => {
-        console.log("Kabadiwala service running")
+        console.log("Kabadiwala service running.")
         const users = await Friends.deleteMany({})
         console.log("Kabadiwala service ended.")
-        console.log(`Removed Rows : ${users["deletedCount"]}`)
+        console.log(`Cleaned Items : ${users["deletedCount"]} : From Model : Friends`)
     }
 }
 export default Utils
