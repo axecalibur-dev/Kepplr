@@ -7,6 +7,12 @@ class Utils {
     }
 
     fire_password_reset_mail = async (email_address , otp) => {
+
+        console.log("INSIDE FIRE FUNCTION")
+        console.log("ENV")
+        console.log(`Email : ${process.env.SERVICE_EMAIl}`)
+        console.log(`PWD : ${process.env.SERVICE_EMAIl_PWD}`)
+        console.log("ENV")
         let mail_sent = false;
         const transporter = nodemailer.createTransport({
             service:"outlook",
@@ -15,6 +21,8 @@ class Utils {
                 pass : process.env.SERVICE_EMAIl_PWD
             }
         })
+
+        console.log("TRANSPORTER DONE")
         const template =`<!DOCTYPE html>
           <html lang="">
           <head>
@@ -33,6 +41,10 @@ class Utils {
           </html>
         `;
 
+        console.log("SENDINGTO")
+        console.log(email_address)
+        console.log("SENDINGTO")
+
         const mailOptions = {
             from: process.env.SERVICE_EMAIl,
             to: email_address,
@@ -41,6 +53,11 @@ class Utils {
         };
         await transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
+                console.log("SEND MAIL ERROR ")
+                console.log(error)
+                console.log("SEND MAIL ERROR ")
+                console.log("EXTRA INFO")
+                console.log(info)
                 mail_sent = false
             } else {
                 mail_sent = true

@@ -40,6 +40,9 @@ class AuthServices {
     reset_password = async (parent , {input}) => {
 
         const system_otp = utils.generateRandomOTP()
+        console.log("OTP")
+        console.log(system_otp)
+        console.log("OTP")
         const user = await Friends.findOneAndUpdate({
             email : input.email
         }, {
@@ -49,7 +52,13 @@ class AuthServices {
 
         )
 
+        console.log("USER")
+        console.log(user)
+        console.log("USER")
+
         if(!user){
+
+            console.log("No such user found.")
             return {
                 "message":"No such friend with provided email.",
                 "status":HttpStatus.NOT_FOUND,
