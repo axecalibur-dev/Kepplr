@@ -50,7 +50,7 @@ class ControllerServices{
 
     }
 
-    login_user = async(parent, {input}) => {
+    login_user = async(parent, {input} , context, info) => {
         const current_user = await Friends.findOne({
             email : input.email,
         })

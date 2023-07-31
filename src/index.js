@@ -1,12 +1,19 @@
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import { resolvers } from './data/resolvers.graphql';
-import  typeDefs  from './data/schema.graphql';
-import { PORT } from './config/config';
+import {ApolloServer} from 'apollo-server-express';
+import {resolvers} from './data/resolvers.graphql';
+import typeDefs from './data/schema.graphql';
+import {PORT} from './config/config';
 import {cronJob} from "./crons/daily_tasks";
 
 async function startServer() {
-    const server = new ApolloServer({ typeDefs, resolvers });
+    const server = new ApolloServer({ typeDefs, resolvers ,context: ({ req }) => {
+            return {
+                authorization: req.headers.authorization,
+                origin : req.headers.origin
+
+            };
+        },
+    });
     await server.start();
 
     const app = express();
