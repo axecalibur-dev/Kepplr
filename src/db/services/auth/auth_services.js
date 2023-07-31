@@ -39,10 +39,7 @@ class AuthServices {
 
     reset_password = async (parent , {input}) => {
 
-        const system_otp = utils.generateRandomOTP()
-        console.log("OTP")
-        console.log(system_otp)
-        console.log("OTP")
+        const system_otp = await utils.generateRandomOTP()
         const user = await Friends.findOneAndUpdate({
             email : input.email
         }, {
@@ -52,9 +49,6 @@ class AuthServices {
 
         )
 
-        console.log("USER")
-        console.log(user)
-        console.log("USER")
 
         if(!user){
 
@@ -67,10 +61,11 @@ class AuthServices {
             }
         }
 
-        const mail_fired = utils.fire_password_reset_mail(
+        const mail_fired =  await utils.fire_password_reset_mail(
             input.email ,
             system_otp
         )
+
 
         if(mail_fired){
             return {
