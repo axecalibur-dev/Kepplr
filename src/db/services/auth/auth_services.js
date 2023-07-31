@@ -78,7 +78,7 @@ class AuthServices {
 
         else{
             return {
-                "message":`Mail`,
+                "message":`Could not send mail. Please try again later.`,
                 "status":HttpStatus.OK,
                 "data":null,
                 "meta" : {}
@@ -109,7 +109,7 @@ class AuthServices {
 
             else {
                 return {
-                    "message":"FOUND",
+                    "message":"Password Updated",
                     "status":HttpStatus.OK,
                     "data":null,
                     "meta" : {

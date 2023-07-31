@@ -40,18 +40,13 @@ class Utils {
             subject: "Password Reset Email -<> ",
             html: template,
         };
-        return new Promise((resolve, reject) => {
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log("ERR")
-                    console.log(error)
-                    resolve(false);
-                    // Resolve the Promise with false (email not sent).
-                } else {
-                    resolve(true); // Resolve the Promise with true (email sent successfully).
-                }
-            });
-        });
+        try {
+            await transporter.sendMail(mailOptions);
+            return true; // Email sent successfully
+        } catch (error) {
+            console.error("Error sending email:", error);
+            return false; // Failed to send email
+        }
     }
 
     generateRandomOTP = () => {
