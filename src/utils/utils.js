@@ -43,10 +43,12 @@ class Utils {
         return new Promise((resolve, reject) => {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
+                    console.log("ERR")
+                    console.log(error)
                     resolve(false);
                     // Resolve the Promise with false (email not sent).
                 } else {
-                    reject(true); // Resolve the Promise with true (email sent successfully).
+                    resolve(true); // Resolve the Promise with true (email sent successfully).
                 }
             });
         });
