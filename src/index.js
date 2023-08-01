@@ -3,14 +3,15 @@ import {ApolloServer} from 'apollo-server-express';
 import {resolvers} from './data/resolvers.graphql';
 import typeDefs from './data/schema.graphql';
 import {PORT} from './config/config';
-import {cronJob_Night , cronJob_Morning} from "./crons/daily_tasks";
+import {cronJob_Night } from "./crons/daily_tasks";
 
 async function startServer() {
     const server = new ApolloServer({ typeDefs, resolvers ,context: ({ req }) => {
             return {
                 authorization: req.headers.authorization,
-                origin : req.headers.origin
-
+                origin : req.headers.origin,
+                user_agent : req.headers['user-agent'],
+                content_type : req.headers['content-type'],
             };
         },
     });
@@ -29,9 +30,8 @@ async function startServer() {
 
     try {
         cronJob_Night.start()
-        cronJob_Morning.start()
-        console.log("Kabadiwala Service Scheduled .... (6 AM , 11 PM)")
-        console.log("2 Cron Jobs Initiated")
+        console.log("Kabadiwala Service Scheduled .... ( 11 PM)")
+        console.log("Cron Jobs Initiated")
     }
 
     catch (err) {
@@ -39,8 +39,6 @@ async function startServer() {
         console.log("CRON ERROR : ")
         console.log(err)
     }
-
-
 }
 
 startServer().then(r => console.log("Server running")).catch((err=> console.log(err)))

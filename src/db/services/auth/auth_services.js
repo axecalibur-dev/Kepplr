@@ -10,6 +10,7 @@ class AuthServices {
     build_token = (user) => {
         const access_token =  jwt.sign({
                 token_type : "Bearer/Access",
+                email: user.email,
                 friend_id: user.id,
                 firstName : user.firstName,
                 lastName : user.lastName
@@ -18,6 +19,7 @@ class AuthServices {
 
         const refresh_token =  jwt.sign({
                 token_type : "Refresh",
+                email: user.email,
                 friend_id: user.id,
                 firstName : user.firstName,
                 lastName : user.lastName
@@ -35,6 +37,22 @@ class AuthServices {
     verifyToken = (token) => {
         return jwt.verify(token, process.env.JWT_SECRET);
 
+    }
+
+    decode_token_type = (token) => {
+        const auth = new AuthServices();
+        const decoded = auth.verifyToken(token)
+        if(decoded["token_type"] === "Bearer/Access") {
+            return decoded["token_type"]
+        }
+
+        else if (decoded["token_type"] === "Refresh") {
+            return decoded["token_type"]
+        }
+
+        else{
+            return "Invalid"
+        }
     }
 
     reset_password = async (parent , {input}) => {
