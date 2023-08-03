@@ -1,6 +1,6 @@
 const CronValues = {
     "Every_5_Minutes" : '*/5 * * * * *',
-    "Late_Night_11" : '0 23 * * *',
+    "Late_Night_11" : '55 21 * * *',
     "Early_Morning_6" : '0 6 * * *',
 }
 
