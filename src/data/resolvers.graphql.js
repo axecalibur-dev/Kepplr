@@ -1,6 +1,7 @@
 import ControllerServices from "../db/services/controller_services";
 import Utils from "../utils/utils";
 import AuthServices from "../db/services/auth/auth_services";
+import GeneralException from "../Exceptions/custom_exceptions";
 const Controller = new ControllerServices()
 
 const utils = new Utils();
@@ -13,10 +14,16 @@ export const resolvers = {
             )
         },
 
-        getAFriendByID: async (parent, {input} ) => {
-            return Controller.getOneUserByID(
-                parent, {input}
-            )
+        getAFriendByID: async (parent, {input} , context , info ) => {
+          try {
+              auth.verifyToken(context.headers.authorization)
+              return Controller.getOneUserByID(
+                  parent, {input} , context , info
+              )
+          }
+          catch (error){
+              throw new GeneralException("AuthorizationException",'Authorization credentials not provided.')
+          }
         },
 
         regenerate_token : async (parent , {input}) => {
