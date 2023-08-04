@@ -1,11 +1,12 @@
-class GeneralException extends Error {
-    constructor(name , message, statusCode, data , meta) {
-        super(message);
+import HttpStatus from "http-status-codes";
 
-        this.name = name;
-        this.statusCode = statusCode;
-        this.data = data;
-        this.meta = meta;
-    }
+class ServiceException extends Error {
+  constructor(name, message, status) {
+    super(message);
+
+    this.name = name;
+    this.message = message;
+    this.statusCode = status || HttpStatus.BAD_REQUEST;
+  }
 }
-export default GeneralException;
+export { ServiceException };
