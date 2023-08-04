@@ -1,76 +1,76 @@
 import mongoose from "mongoose";
 
-export const friendSchema = new mongoose.Schema({
+export const friendSchema = new mongoose.Schema(
+  {
     created_at: {
-        type: Date,
-        default: Date.now,
+      type: Date,
+      default: Date.now,
     },
     updated_at: {
-        type: Date,
-        default: Date.now,
+      type: Date,
+      default: Date.now,
     },
-    email : {
-        type : String,
-        required: true
+    email: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    password : {
-        type : String,
-        default:null
-    },
-
-    requested_password_assistance : {
-        type:Boolean,
-        default:false
+    password: {
+      type: String,
     },
 
-    password_request_otp : {
-        type:String,
-        default:null
+    requested_password_assistance: {
+      type: Boolean,
+      default: false,
     },
 
-    firstName : {
-        type : String,
-        required: true
+    password_request_otp: {
+      type: String,
+      default: null,
     },
 
-    lastName : {
-        type : String,
-        required: true
+    firstName: {
+      type: String,
+      required: true,
     },
 
-    gender : {
-        type:String,
-        required: true
+    lastName: {
+      type: String,
+      required: true,
     },
 
-    age : {
-        type:String,
-        required:true
-    },
-    language : {
-        type : String
+    gender: {
+      type: String,
+      required: true,
     },
 
-    contacts : {
-        type : Array
+    age: {
+      type: String,
     },
 
-    registration_source : {
-        type: String,
-        enum: ['Google', 'Facebook', 'Email'],
-        required: true,
-        default:"Email",
+    language: {
+      type: String,
     },
 
+    contacts: {
+      type: Array,
+    },
 
+    registration_source: {
+      type: String,
+      enum: ["Google", "Facebook", "Email"],
+      required: true,
+      default: "Email",
+    },
 
     oAuthCredentials: {
-        type: mongoose.Schema.Types.Mixed,
-        default: {},
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
     },
 
     // {^^^^^^^^^ format for oAuthCredentials
     //    "open_api_id" : "google"/"facebook"
     // }
-
-}, { minimize: false })
+  },
+  { minimize: false },
+);
