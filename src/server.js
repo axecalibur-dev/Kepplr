@@ -6,6 +6,9 @@ import { PORT } from "./config/config";
 import { cronJob_Night } from "./crons/daily_tasks";
 import cronstrue from "cronstrue";
 import ExceptionResponseBuilder from "./Exceptions/exception_builder";
+import HttpStatus from "http-status-codes";
+import SlackService from "./slack/slack_service";
+const Slack = new SlackService();
 // import RabbitMQService from "./mqservices/rabbitmq_service";
 const ApolloException = new ExceptionResponseBuilder();
 // const RabbitMQ = new RabbitMQService();
@@ -54,4 +57,12 @@ async function startServer() {
 
 startServer()
   .then((result) => console.log(`Server running`))
+  .catch((err) => console.log(err));
+
+Slack.send_to_slack(
+  "Server Startup",
+  `Server has started successfully.`,
+  HttpStatus.OK,
+)
+  .then((r) => console.log("Slack Sent"))
   .catch((err) => console.log(err));
