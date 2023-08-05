@@ -5,8 +5,8 @@ class APIResponseBuilder {
   auth_response = async (message, current_friend, meta) => {
     return {
       message: message || "Success",
-      refresh_token: await Auth.build_token(current_friend).refresh_token,
-      access_token: await Auth.build_token(current_friend).access_token,
+      refresh_token: Auth.build_token(current_friend).refresh_token,
+      access_token: Auth.build_token(current_friend).access_token,
       status: HttpStatus.OK,
       data: [current_friend],
       meta: meta,

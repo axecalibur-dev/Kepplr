@@ -5,7 +5,9 @@ import { ServiceException } from "../../Exceptions/custom_exceptions";
 import AuthServices from "./auth/auth_services";
 const Auth = new AuthServices();
 import APIResponseBuilder from "./response_builder";
+import SlackService from "../../slack/slack_service";
 const APIResponse = new APIResponseBuilder();
+const Slack = new SlackService();
 
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
@@ -56,7 +58,11 @@ class ControllerServices {
         HttpStatus.BAD_REQUEST,
       );
     }
-
+    await Slack.send_to_slack(
+      "LOGIN_EVENT",
+      `Login Performed : Email : ${input.email}`,
+      HttpStatus.OK,
+    );
     return APIResponse.auth_response("Login Success", current_user, {});
   };
 
