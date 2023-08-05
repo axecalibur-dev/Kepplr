@@ -6,7 +6,9 @@ import { PORT } from "./config/config";
 import { cronJob_Night } from "./crons/daily_tasks";
 import cronstrue from "cronstrue";
 import ExceptionResponseBuilder from "./Exceptions/exception_builder";
+import RabbitMQService from "./mqservices/rabbitmq_service";
 const ApolloException = new ExceptionResponseBuilder();
+const RabbitMQ = new RabbitMQService();
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
@@ -46,6 +48,8 @@ async function startServer() {
     console.log("CRON ERROR : ");
     console.log(err);
   }
+
+  await RabbitMQ.connectToRabbitMQ();
 }
 
 startServer()
