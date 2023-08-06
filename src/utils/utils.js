@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { Friends } from "../db/dbConnector";
+import { Friends } from "../db/dbConnector.js";
 class Utils {
   format_error_message = (error_message) => {
     return error_message.replace(/Path/g, "Value").replace(/`/g, "");
