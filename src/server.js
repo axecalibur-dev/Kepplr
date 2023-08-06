@@ -45,9 +45,7 @@ async function startServer() {
         process.env.CRON_SCHEDULE,
       )}`,
     );
-    console.log("Cron Jobs Initiated");
   } catch (err) {
-    console.log("Cron Job Exception");
     console.log("CRON ERROR : ");
     console.log(err);
   }
