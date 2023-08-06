@@ -2,7 +2,8 @@
   "name": "grapqhl-with-express---apollo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
     "start": "nodemon src/server.js --exec babel-node -e js",
     "test": "node src/tests/test_connection.js --exec babel-node -e js"
@@ -18,7 +19,6 @@
   },
   "dependencies": {
     "@slack/bolt": "^3.13.3",
-    "amqplib": "^0.10.3",
     "apollo-errors": "^1.9.0",
     "apollo-server": "^3.12.0",
     "apollo-server-express": "^3.12.0",

@@ -1,6 +1,6 @@
 import cron from "node-cron";
-import Utils from "../utils/utils";
-import SlackService from "../slack/slack_service";
+import Utils from "../utils/utils.js";
+import SlackService from "../slack/slack_service.js";
 import HttpStatus from "http-status-codes";
 const utils = new Utils();
 

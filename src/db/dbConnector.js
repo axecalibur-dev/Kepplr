@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-const { environment } = require("../config/config");
-
-const { friendSchema } = require("./schema/friendSchema");
+import { environment } from "../config/config.js";
+import { friendSchema } from "./schema/friendSchema.js";
 
 const env = process.env.ENVIRONMENT;
 mongoose

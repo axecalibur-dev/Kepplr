@@ -1,6 +1,5 @@
-import ControllerServices from "../db/services/controller_services";
-import AuthServices from "../db/services/auth/auth_services";
-import { AuthenticationException } from "../Exceptions/custom_exceptions";
+import AuthServices from "../db/services/auth/auth_services.js";
+import ControllerServices from "../db/services/controller_services.js";
 const Controller = new ControllerServices();
 
 const auth = new AuthServices();

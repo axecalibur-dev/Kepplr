@@ -1,11 +1,11 @@
-import { Friends } from "../dbConnector";
+import { Friends } from "../dbConnector.js";
 import HttpStatus from "http-status-codes";
 import bcrypt from "bcrypt";
-import { ServiceException } from "../../Exceptions/custom_exceptions";
-import AuthServices from "./auth/auth_services";
+import { ServiceException } from "../../Exceptions/custom_exceptions.js";
+import AuthServices from "./auth/auth_services.js";
 const Auth = new AuthServices();
-import APIResponseBuilder from "./response_builder";
-import SlackService from "../../slack/slack_service";
+import APIResponseBuilder from "./response_builder.js";
+import SlackService from "../../slack/slack_service.js";
 const APIResponse = new APIResponseBuilder();
 const Slack = new SlackService();
 

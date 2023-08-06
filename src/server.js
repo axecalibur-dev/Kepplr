@@ -1,17 +1,15 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { resolvers } from "./data/resolvers.graphql";
-import typeDefs from "./data/schema.graphql";
-import { PORT } from "./config/config";
-import { cronJob_Night } from "./crons/daily_tasks";
+import { resolvers } from "./data/resolvers.graphql.js";
+import typeDefs from "./data/schema.graphql.js";
+import { PORT } from "./config/config.js";
+import { cronJob_Night } from "./crons/daily_tasks.js";
 import cronstrue from "cronstrue";
-import ExceptionResponseBuilder from "./Exceptions/exception_builder";
+import ExceptionResponseBuilder from "./Exceptions/exception_builder.js";
 import HttpStatus from "http-status-codes";
-import SlackService from "./slack/slack_service";
+import SlackService from "./slack/slack_service.js";
 const Slack = new SlackService();
-// import RabbitMQService from "./mqservices/rabbitmq_service";
 const ApolloException = new ExceptionResponseBuilder();
-// const RabbitMQ = new RabbitMQService();
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
@@ -49,15 +47,13 @@ async function startServer() {
     console.log("CRON ERROR : ");
     console.log(err);
   }
-
-  // await RabbitMQ.connectToRabbitMQ();
 }
 
 startServer()
   .then((result) => console.log(`Server running`))
   .catch((err) => console.log(err));
 
-Slack.send_to_slack(
+await Slack.send_to_slack(
   "Server Startup 🚀",
   `Server has started successfully at ${process.env.DEPLOYMENT_SOURCE} ✅`,
   HttpStatus.OK,
