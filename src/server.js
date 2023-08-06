@@ -60,8 +60,8 @@ startServer()
   .catch((err) => console.log(err));
 
 Slack.send_to_slack(
-  "Server Startup",
-  `Server has started successfully at ${process.env.DEPLOYMENT_SOURCE}.`,
+  "Server Startup 🚀",
+  `Server has started successfully at ${process.env.DEPLOYMENT_SOURCE} ✅`,
   HttpStatus.OK,
 )
   .then((r) => console.log("Slack Sent"))

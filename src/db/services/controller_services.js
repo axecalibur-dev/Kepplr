@@ -58,11 +58,7 @@ class ControllerServices {
         HttpStatus.BAD_REQUEST,
       );
     }
-    await Slack.send_to_slack(
-      "LOGIN_EVENT",
-      `Login Performed : Email : ${input.email}`,
-      HttpStatus.OK,
-    );
+
     return APIResponse.auth_response("Login Success", current_user, {});
   };
 
