@@ -10,8 +10,8 @@ export const cronJob_Night = cron.schedule(
   () => {
     utils.kabadiwala().then((result) =>
       Slack.send_to_slack(
-        "CRON_SERVICE",
-        `CRON SERVICE > OK`,
+        "CRON_SERVICE 🔁",
+        `CRON SERVICE > OK ✅`,
         HttpStatus.OK,
       ).catch((err) => {
         console.log(`Cleaning Failed ${err}`);
