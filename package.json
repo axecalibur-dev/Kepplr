@@ -4,16 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon src/server.js --exec babel-node -e js",
-    "test": "node src/tests/test_connection.js --exec babel-node -e js"
+    "start": "nodemon src/server.js --exec babel-node -e js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.4.4",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.24.1",
     "prettier": "^3.0.1"
   },
   "dependencies": {
