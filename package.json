@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.4.4",
+    "@types/node": "^15.0.3",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
     "prettier": "^3.0.1"
   },
   "dependencies": {
