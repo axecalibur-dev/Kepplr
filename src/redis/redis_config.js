@@ -2,7 +2,7 @@ import redis, { createClient } from "redis";
 
 class RedisService {
   connect = async () => {
-    const client = redis.createClient({
+    const client = await redis.createClient({
       socket: {
         host: process.env.REDIS_URL_DEPLOYED,
         port: 15104,
