@@ -1,5 +1,5 @@
 import HttpStatus from "http-status-codes";
-import AuthServices from "./auth/auth_services.js";
+import AuthServices from "./auth/auth_services";
 const Auth = new AuthServices();
 class APIResponseBuilder {
   auth_response = async (message, current_friend, meta) => {

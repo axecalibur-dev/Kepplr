@@ -19,7 +19,7 @@ mongoose
     console.log("DB Connection Failed");
   });
 
-const redisClient = await Redis.connect();
+const redisClient = Redis.connect();
 
 const Friends = mongoose.model("Friends", friendSchema);
 
