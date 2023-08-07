@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { Friends } from "../../dbConnector.js";
+import { Friends } from "../../dbConnector";
 import HttpStatus from "http-status-codes";
-import Utils from "../../../utils/utils.js";
-import GlobalConstants from "../../../globals/constants/global_constants.js";
+import Utils from "../../../utils/utils";
+import GlobalConstants from "../../../globals/constants/global_constants";
 
 const utils = new Utils();
 

@@ -1,13 +1,13 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { resolvers } from "./data/resolvers.graphql.js";
-import typeDefs from "./data/schema.graphql.js";
-import { PORT } from "./config/config.js";
-import { cronJob_Night } from "./crons/daily_tasks.js";
+import { resolvers } from "./data/resolvers.graphql";
+import typeDefs from "./data/schema.graphql";
+import { PORT } from "./config/config";
+import { cronJob_Night } from "./crons/daily_tasks";
 import cronstrue from "cronstrue";
-import ExceptionResponseBuilder from "./Exceptions/exception_builder.js";
+import ExceptionResponseBuilder from "./Exceptions/exception_builder";
 import HttpStatus from "http-status-codes";
-import SlackService from "./slack/slack_service.js";
+import SlackService from "./slack/slack_service";
 const Slack = new SlackService();
 const ApolloException = new ExceptionResponseBuilder();
 async function startServer() {
@@ -53,7 +53,7 @@ startServer()
   .then((result) => console.log(`Server running`))
   .catch((err) => console.log(err));
 
-await Slack.send_to_slack(
+Slack.send_to_slack(
   "Server Startup 🚀",
   `Server has started successfully at ${process.env.DEPLOYMENT_SOURCE} ✅`,
   HttpStatus.OK,

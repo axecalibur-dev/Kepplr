@@ -1,6 +1,5 @@
-import pkg from "@slack/bolt";
-const { App } = pkg;
-import SlackUtils from "./slack_utils.js";
+import { App } from "@slack/bolt";
+import SlackUtils from "./slack_utils";
 const SlackUtility = new SlackUtils();
 class SlackService {
   send_to_slack = async (event_type, message, code) => {

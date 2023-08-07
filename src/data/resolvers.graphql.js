@@ -1,5 +1,5 @@
-import AuthServices from "../db/services/auth/auth_services.js";
-import ControllerServices from "../db/services/controller_services.js";
+import AuthServices from "../db/services/auth/auth_services";
+import ControllerServices from "../db/services/controller_services";
 const Controller = new ControllerServices();
 
 const auth = new AuthServices();

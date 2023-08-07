@@ -2,7 +2,6 @@
   "name": "grapqhl-with-express---apollo",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "nodemon src/server.js --exec babel-node -e js",
