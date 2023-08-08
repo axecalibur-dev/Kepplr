@@ -5,7 +5,7 @@ const router = express.Router();
 
 const Connection = new ConnectionTest();
 
-router.get("/test", (req, res) => {
+router.post("/test", (req, res) => {
   const param = req.query["key"];
   if (!param) {
     res.send("Cannot use /test, api key not provided.");
