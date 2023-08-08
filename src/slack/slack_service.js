@@ -14,7 +14,7 @@ class SlackService {
         text: SlackUtility.build_slack_message(event_type, message, code),
       })
       .then(() => {
-        console.log("Message sent to Slack!");
+        // console.log("Message sent to Slack!");
       })
       .catch((error) => {
         console.error("Error sending message to Slack:", error);

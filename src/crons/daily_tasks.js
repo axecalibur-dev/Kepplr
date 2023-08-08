@@ -5,7 +5,7 @@ import HttpStatus from "http-status-codes";
 const utils = new Utils();
 
 const Slack = new SlackService();
-export const cronJob_Night = cron.schedule(
+export const cronService = cron.schedule(
   process.env.CRON_SCHEDULE,
   () => {
     utils
