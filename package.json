@@ -4,15 +4,16 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon src/server.js --exec babel-node -e js"
+    "start": "nodemon --exec babel-node src/server.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@babel/node": "^7.22.10",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-stage-0": "^7.8.3",
     "@types/node": "^15.0.3",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.24.1",
     "prettier": "^3.0.1"
   },
   "dependencies": {
