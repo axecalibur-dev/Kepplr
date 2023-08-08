@@ -1,5 +1,4 @@
 import express from "express";
-// import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import bodyParser from "body-parser";
 import http from "http";
@@ -8,7 +7,6 @@ import { resolvers } from "./data/resolvers.graphql";
 import typeDefs from "./data/schema.graphql";
 import { PORT } from "./config/config";
 import { cronService } from "./crons/daily_tasks";
-import cronstrue from "cronstrue";
 import ExceptionResponseBuilder from "./Exceptions/exception_builder";
 import HttpStatus from "http-status-codes";
 import SlackService from "./slack/slack_service";
@@ -16,10 +14,12 @@ const Slack = new SlackService();
 const ApolloException = new ExceptionResponseBuilder();
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
+import routes from "./routes/routes";
 
 async function startServer() {
   const app = express();
   const httpServer = http.createServer(app);
+  app.use("/rest", routes);
 
   const server = new ApolloServer({
     persistedQueries: false,
@@ -35,11 +35,8 @@ async function startServer() {
   });
   await server.start();
 
-  app.get("/", (req, res) => {
-    res.send(`Apollo GraphQL x Express server is ready.`);
-  });
+  app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
 
-  app.use(cors(), bodyParser.json(), expressMiddleware(server));
   cronService.start();
   await new Promise((resolve, reject) => {
     httpServer.listen({ port: process.env.PORT }, (error) => {
@@ -59,13 +56,13 @@ startServer()
   )
   .catch((err) => console.log(err));
 
-Slack.send_to_slack(
-  "Server Startup 🚀",
-  `Server has started successfully of type : ${process.env.NODE_ENV} ✅ `,
-  HttpStatus.OK,
-)
-  .then((r) => {
-    console.log("Slack running and communicating ✅ ");
-    console.log("Slack Startup Notification Sent 🚨 ");
-  })
-  .catch((err) => console.log("Slack failed ❌ ", err));
+// Slack.send_to_slack(
+//   "Server Startup 🚀",
+//   `Server has started successfully of type : ${process.env.NODE_ENV} ✅ `,
+//   HttpStatus.OK,
+// )
+//   .then((r) => {
+//     console.log("Slack running and communicating ✅ ");
+//     console.log("Slack Startup Notification Sent 🚨 ");
+//   })
+//   .catch((err) => console.log("Slack failed ❌ ", err));
