@@ -50,12 +50,12 @@ async function startServer() {
 }
 
 startServer()
-  .then((result) => console.log(`Server running`))
+  .then((result) => console.log(`Server running , Build Type : ${process.env.NODE_ENV}`))
   .catch((err) => console.log(err));
 
 Slack.send_to_slack(
   "Server Startup 🚀",
-  `Server has started successfully at ${process.env.DEPLOYMENT_SOURCE} ✅`,
+  `Server has started successfully of type : ${process.env.NODE_ENV} ✅`,
   HttpStatus.OK,
 )
   .then((r) => console.log("Slack Sent"))
