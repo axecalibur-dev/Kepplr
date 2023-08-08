@@ -12,6 +12,7 @@ const Slack = new SlackService();
 const ApolloException = new ExceptionResponseBuilder();
 async function startServer() {
   const server = new ApolloServer({
+    persistedQueries: false,
     typeDefs,
     resolvers,
     context: ({ req }) => {
