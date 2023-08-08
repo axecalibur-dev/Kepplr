@@ -11,12 +11,12 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Atlas connection established.");
+    console.log("Atlas connection established 💽");
   })
   .catch((error) => {
-    console.log("DB Connection Failed with Error : ");
+    console.log("DB Connection Failed with Error ❌ : ");
     console.log(error);
-    console.log("DB Connection Failed");
+    console.log("DB Connection Failed ❌ ");
   });
 
 const redisClient = Redis.connect();

@@ -14,13 +14,13 @@ class RedisService {
     client
       .connect()
       .then(() => {
-        console.log("");
+        // console.log("");
       })
       .catch((err) => console.log(err));
 
-    client.on("connect", (err) => console.log("Redis Connected"));
-    client.on("ready", (err) => console.log("Redis Ready"));
-    client.on("error", (err) => console.log("Redis Server Error", err));
+    client.on("connect", (err) => console.log("Redis Connected 💽 "));
+    client.on("ready", (err) => console.log("Redis Ready ✅ "));
+    client.on("error", (err) => console.log("Redis Server Error ❌ ", err));
 
     return client;
   };
