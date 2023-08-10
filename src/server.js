@@ -37,7 +37,7 @@ async function startServer() {
 
   app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
 
-  cronService.start();
+  // cronService.start();
   await new Promise((resolve, reject) => {
     httpServer.listen({ port: process.env.PORT }, (error) => {
       if (error) {
