@@ -6,7 +6,7 @@ import cors from "cors";
 import { resolvers } from "./data/resolvers.graphql";
 import typeDefs from "./data/schema.graphql";
 import { PORT } from "./config/config";
-import { cronService } from "./crons/daily_tasks";
+// import { cronService } from "./crons/daily_tasks";
 import ExceptionResponseBuilder from "./Exceptions/exception_builder";
 import HttpStatus from "http-status-codes";
 import SlackService from "./slack/slack_service";
