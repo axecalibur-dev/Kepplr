@@ -6,7 +6,6 @@ import cors from "cors";
 import { resolvers } from "./data/resolvers.graphql";
 import typeDefs from "./data/schema.graphql";
 import { PORT } from "./config/config";
-// import { cronService } from "./crons/daily_tasks";
 import ExceptionResponseBuilder from "./Exceptions/exception_builder";
 import HttpStatus from "http-status-codes";
 import SlackService from "./slack/slack_service";
@@ -37,7 +36,7 @@ async function startServer() {
 
   app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
 
-  // cronService.start();
+
   await new Promise((resolve, reject) => {
     httpServer.listen({ port: process.env.PORT }, (error) => {
       if (error) {
