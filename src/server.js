@@ -7,13 +7,13 @@ import { resolvers } from "./data/resolvers.graphql";
 import typeDefs from "./data/schema.graphql";
 import { PORT } from "./config/config";
 import ExceptionResponseBuilder from "./Exceptions/exception_builder";
-import HttpStatus from "http-status-codes";
 import SlackService from "./slack/slack_service";
 const Slack = new SlackService();
 const ApolloException = new ExceptionResponseBuilder();
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import routes from "./routes/routes";
+import HttpStatus from "http-status-codes";
 
 async function startServer() {
   const app = express();
