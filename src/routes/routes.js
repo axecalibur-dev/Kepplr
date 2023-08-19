@@ -5,7 +5,6 @@ const Connection = new ConnectionTest();
 
 router.post("/test", async (req, res) => {
   const param = req.query["key"];
-  console.log(param);
   if (!param) {
     return res.send("Cannot use /test, api key not provided.");
   }
@@ -17,6 +16,12 @@ router.post("/test", async (req, res) => {
   const result = await Connection.test_connections();
   return res.send({
     test_result: result,
+  });
+});
+
+router.get("/health", async (req, res) => {
+  return res.status(200).send({
+    healthCheck: "OK",
   });
 });
 // SignUp API
