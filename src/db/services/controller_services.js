@@ -1,13 +1,14 @@
 import { Friends } from "../dbConnector";
 import HttpStatus from "http-status-codes";
 import bcrypt from "bcrypt";
-import { ServiceException } from "../../Exceptions/custom_exceptions";
 import AuthServices from "./auth/auth_services";
 const Auth = new AuthServices();
 import APIResponseBuilder from "./response_builder";
 import SlackService from "../../slack/slack_service";
 const APIResponse = new APIResponseBuilder();
 const Slack = new SlackService();
+
+import { GraphQLError } from "graphql";
 
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
@@ -31,11 +32,12 @@ class ControllerServices {
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
-    throw new ServiceException(
-      "Sign Up Failed.",
-      "User with this email already exists.",
-      HttpStatus.BAD_REQUEST,
-    );
+    throw new GraphQLError("User for this email already exists.", {
+      extensions: {
+        name: "ServiceException",
+        status: HttpStatus.BAD_REQUEST,
+      },
+    });
   };
 
   login_user = async (parent, { input }, context, info) => {
@@ -44,19 +46,21 @@ class ControllerServices {
     });
 
     if (!current_user) {
-      throw new ServiceException(
-        "Login Failed.",
-        "User with this email was not found.",
-        HttpStatus.NOT_FOUND,
-      );
+      throw new GraphQLError("User for this email was not found.", {
+        extensions: {
+          name: "ServiceException",
+          status: HttpStatus.NOT_FOUND,
+        },
+      });
     }
 
     if (!(await bcrypt.compare(input.password, current_user.password))) {
-      throw new ServiceException(
-        "Login Failed.",
-        "Invalid Password.",
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new GraphQLError("Invalid password provided.", {
+        extensions: {
+          name: "ServiceException",
+          status: HttpStatus.BAD_REQUEST,
+        },
+      });
     }
 
     return APIResponse.auth_response("Login Success", current_user, {});
@@ -64,19 +68,24 @@ class ControllerServices {
 
   regenerate_token = async (parent, decoded_token, context, info) => {
     if (decoded_token.token_type === "Bearer/Access") {
-      throw new ServiceException(
-        "Token Service Failed.",
-        "Invalid Token type passed. Please provide Refresh Token.",
-        HttpStatus.BAD_REQUEST,
+      throw new GraphQLError(
+        "Invalid token provided. Please provide refresh token.",
+        {
+          extensions: {
+            name: "ServiceException",
+            status: HttpStatus.BAD_REQUEST,
+          },
+        },
       );
     }
     const current_user = await Friends.findById(decoded_token.friend_id);
     if (!current_user) {
-      throw new ServiceException(
-        "Token Service Failed.",
-        "User for this token was not found.",
-        HttpStatus.NOT_FOUND,
-      );
+      throw new GraphQLError("User for this token was not found.", {
+        extensions: {
+          name: "ServiceException",
+          status: HttpStatus.NOT_FOUND,
+        },
+      });
     }
     return APIResponse.auth_response("Tokens Refresh", current_user, {});
   };
@@ -144,12 +153,12 @@ class ControllerServices {
         };
       }
     } catch (err) {
-      return {
-        message: `An exception occurred.`,
-        status: HttpStatus.BAD_REQUEST,
-        data: null,
-        meta: {},
-      };
+      throw new GraphQLError("Something went wrong.", {
+        extensions: {
+          name: "ServiceException",
+          status: HttpStatus.NOT_FOUND,
+        },
+      });
     }
   };
 }
