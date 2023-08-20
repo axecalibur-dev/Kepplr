@@ -1,7 +1,7 @@
 import HttpStatus from "http-status-codes";
 
 class ExceptionResponseBuilder {
-  throw_response = (error) => {
+  throw_error_as_response = (error) => {
     return {
       name: error.extensions["name"] || "UnknownException",
       message: error.message || "An exception has occurred.",
