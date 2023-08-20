@@ -1,9 +1,10 @@
 import express from "express";
 const router = express.Router();
 import ConnectionTest from "../utils/connection_tests";
+import AuthMiddleware from "../db/services/auth/auth_middleware";
 const Connection = new ConnectionTest();
-
-router.post("/test", async (req, res) => {
+const Auth = new AuthMiddleware();
+router.post("/test", async (req, res, next) => {
   const param = req.query["key"];
   if (!param) {
     return res.send("Cannot use /test, api key not provided.");
@@ -19,7 +20,7 @@ router.post("/test", async (req, res) => {
   });
 });
 
-router.get("/health", async (req, res) => {
+router.get("/health", Auth.auth, async (req, res) => {
   return res.status(200).send({
     healthCheck: "OK",
   });
