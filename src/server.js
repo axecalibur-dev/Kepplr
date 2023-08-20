@@ -14,43 +14,36 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import routes from "./routes/routes";
 import HttpStatus from "http-status-codes";
-
+import GlobalConstants from "./globals/constants/global_constants";
 async function startServer() {
   const app = express();
   const httpServer = http.createServer(app);
-  app.use("/rest", routes);
+  app.use(`${GlobalConstants.REST_Endpoint}`, routes);
 
   const server = new ApolloServer({
-    persistedQueries: false,
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    context: ({ req }) => {
-      return req;
-    },
-    formatError: (error) => {
-      return ApolloException.throw_response(error);
+    formatError: (err) => {
+      return ApolloException.throw_error_as_response(err);
     },
   });
   await server.start();
+  app.use(
+    `${GlobalConstants.GraphQL_Endpoint}`,
+    cors(),
+    bodyParser.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => req.headers,
+    }),
+  );
 
-  app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
-
-
-  await new Promise((resolve, reject) => {
-    httpServer.listen({ port: process.env.PORT }, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
+  await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
 }
 startServer()
   .then((result) =>
     console.log(
-      `Graphql running , Build Type : ${process.env.NODE_ENV}, at http://localhost:${PORT}/graphql 🌐 `,
+      `Graphql running , Build Type : ${process.env.NODE_ENV}, at http://localhost:${PORT}${GlobalConstants.GraphQL_Endpoint} 🌐 `,
     ),
   )
   .catch((err) => console.log(err));

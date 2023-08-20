@@ -8,7 +8,7 @@ export const resolvers = {
     profile: async (parent, { input }, context, info) => {
       return await Controller.getOneUserByID(
         parent,
-        auth.verifyToken(context.headers.authorization),
+        auth.verifyToken(context.authorization),
         context,
         info,
       );
@@ -17,7 +17,7 @@ export const resolvers = {
     regenerate_token: async (parent, { input }, context, info) => {
       return await Controller.regenerate_token(
         parent,
-        auth.verifyToken(context.headers.authorization),
+        auth.verifyToken(context.authorization),
         context,
         info,
       );
