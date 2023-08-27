@@ -17,6 +17,7 @@ mongoose
     console.log("DB Connection Failed with Error ❌ : ");
     console.log(error);
     console.log("DB Connection Failed ❌ ");
+    process.exit(0);
   });
 
 const redisClient = Redis.connect();
