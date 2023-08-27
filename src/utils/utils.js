@@ -35,7 +35,7 @@ class Utils {
     const mailOptions = {
       from: process.env.SERVICE_EMAIl,
       to: email_address,
-      subject: "Keeper Password Assistance",
+      subject: "Kepplr Password Assistance",
       html: template,
     };
     try {
