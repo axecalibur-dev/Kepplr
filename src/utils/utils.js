@@ -18,17 +18,16 @@ class Utils {
     const template = `<!DOCTYPE html>
           <html lang="">
           <head>
-            <title>Password Reset Email</title>
+            <title>Kepplr | Password Reset Email</title>
           </head>
           <body>
-            <h1>Password Reset Email</h1>
+            <h1>Need help with your password ?</h1>
             <p>Hello,</p>
             <p>We received a request to reset your password. Please use the following OTP to proceed:</p>
-            <p><strong>OTP: ${otp}</strong></p>
-            <p><strong>Click here to reset : <a href> ... </a></strong></p>
+            <p><strong>${otp}</strong></p>
             <p>If you didn't request a password reset, you can safely ignore this email.</p>
             <p>Thank you,</p>
-            <p>Your Website Team</p>
+            <p>Kepplr</p>
           </body>
           </html>
         `;
@@ -36,7 +35,7 @@ class Utils {
     const mailOptions = {
       from: process.env.SERVICE_EMAIl,
       to: email_address,
-      subject: "Password Reset Email -<> ",
+      subject: "Keeper Password Assistance",
       html: template,
     };
     try {
