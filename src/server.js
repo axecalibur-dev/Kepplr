@@ -15,6 +15,8 @@ import { expressMiddleware } from "@apollo/server/express4";
 import routes from "./routes/routes";
 import HttpStatus from "http-status-codes";
 import GlobalConstants from "./globals/constants/global_constants";
+import RabbitMQService from "./rabbitmq/rabbitmq_service";
+const RMQ = new RabbitMQService();
 async function startServer() {
   const app = express();
   const httpServer = http.createServer(app);
@@ -58,3 +60,13 @@ Slack.send_to_slack(
     console.log("Slack Startup Notification Sent 🚨 ");
   })
   .catch((err) => console.log("Slack failed ❌ ", err));
+
+const { connection, channel } = RMQ.connect()
+  .then((r) => {
+    console.log("Rabbit MQ Connection has been established.");
+  })
+  .catch((err) => {
+    console.log("Failed to connect to Rabbit MQ.");
+  });
+
+console.log(connection);
