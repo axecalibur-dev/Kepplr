@@ -3,6 +3,6 @@ services:
   kepplr-node-service:
     build : .
     ports:
-      - "8000:8001"
+      - "8000:8002"
     environment:
-      - PORT=8001
+      - PORT=8002

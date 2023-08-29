@@ -26,6 +26,7 @@
     "amqplib": "^0.10.3",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "celery-node": "^0.5.9",
     "cors": "^2.8.5",
     "cronstrue": "^2.28.0",
     "dotenv": "^16.3.1",
