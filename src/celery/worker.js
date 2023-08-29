@@ -12,39 +12,7 @@ class CeleryWorkerService {
       // process.env.SYSTEM_QUEUE,
     );
     worker.register(task_name, () => function_instance(args));
-    worker
-      .start()
-      .then(() => {
-        console.log(
-          `Latest BUILD Celery Task Ongoing :: Task Name : > ${task_name} Args : > ${args}`,
-        );
-      })
-      .catch((err) => {
-        console.log(
-          `Celery Task Error :: Task Name : > ${task_name} Args : > ${args} Error : > ${err}`,
-        );
-      });
-
-    result
-      .get()
-      .then((data) => {
-        console.log(
-          `Celery Task Completed :: Task Name : > ${task_name} Args : > ${args} Result : > ${data}`,
-        );
-        client
-          .disconnect()
-          .then((r) => {
-            console.log("Celery Connection Closed");
-          })
-          .catch((err) => {
-            console.log(
-              `Could not close celery connection with Error : ${err}`,
-            );
-          });
-      })
-      .catch((e) => {
-        console.log(`Task Error : > ${e}`);
-      });
+    worker.start();
   };
 }
 
