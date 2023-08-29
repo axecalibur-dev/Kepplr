@@ -4,7 +4,7 @@ class RabbitMQService {
   connect = async () => {
     try {
       const connection = await amqp.connect(process.env.RABBITMQ_DEPLOYED); // Replace with your connection URL
-      const channel = await connection.createChannel();
+      // const channel = await connection.createChannel();
       // const queue = process.env.SYSTEM_QUEUE;
       // Create a queue
       // await channel.assertQueue(queue);
