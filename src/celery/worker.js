@@ -12,7 +12,14 @@ class CeleryWorkerService {
       // process.env.SYSTEM_QUEUE,
     );
     worker.register(task_name, () => function_instance(args));
-    worker.start();
+    worker
+      .start()
+      .then((r) => {
+        console.log("Task Ongoing");
+      })
+      .catch((err) => {
+        console.log("Task Error", err);
+      });
   };
 }
 
