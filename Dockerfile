@@ -3,5 +3,6 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
-EXPOSE 8000
+ENV DOCKER_PORT 8000
+EXPOSE $DOCKER_PORT
 CMD ["npm", "run", "start:dev"]

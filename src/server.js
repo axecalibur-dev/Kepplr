@@ -17,9 +17,12 @@ import HttpStatus from "http-status-codes";
 import GlobalConstants from "./globals/constants/global_constants";
 import RabbitMQService from "./rabbitmq/rabbitmq_service";
 const RMQ = new RabbitMQService();
+
 async function startServer() {
   const app = express();
   const httpServer = http.createServer(app);
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.use(`${GlobalConstants.REST_Endpoint}`, routes);
 
   const server = new ApolloServer({
@@ -34,25 +37,28 @@ async function startServer() {
   app.use(
     `${GlobalConstants.GraphQL_Endpoint}`,
     cors(),
-    bodyParser.json(),
+    express.json(),
+    express.urlencoded({ extended: true }),
     expressMiddleware(server, {
       context: async ({ req }) => req.headers,
     }),
   );
+
+  console.log("PORT >@ ", PORT);
 
   await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
 }
 startServer()
   .then((result) =>
     console.log(
-      `Graphql running , Build Type : ${process.env.NODE_ENV}, at http://localhost:${PORT}${GlobalConstants.GraphQL_Endpoint} 🌐 `,
+      `Graphql up and running [STABLE] , Build Type : ${process.env.NODE_ENV}, at http://localhost:${PORT}${GlobalConstants.GraphQL_Endpoint} 🌐 `,
     ),
   )
   .catch((err) => console.log(err));
 
 Slack.send_to_slack(
-  "Server Startup 🚀",
-  `Server has started successfully of type : ${process.env.NODE_ENV} ✅ `,
+  "Server Startup OK 🚀",
+  `Server has started successfully of environment : ${process.env.NODE_ENV} ✅ `,
   HttpStatus.OK,
 )
   .then((r) => {
@@ -61,12 +67,10 @@ Slack.send_to_slack(
   })
   .catch((err) => console.log("Slack failed ❌ ", err));
 
-const { connection, channel } = RMQ.connect()
+RMQ.connect()
   .then((r) => {
     console.log("Rabbit MQ Connection has been established.");
   })
   .catch((err) => {
     console.log("Failed to connect to Rabbit MQ.");
   });
-
-console.log(connection);

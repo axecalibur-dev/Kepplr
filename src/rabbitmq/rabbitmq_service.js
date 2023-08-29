@@ -3,18 +3,15 @@ import amqp from "amqplib";
 class RabbitMQService {
   connect = async () => {
     try {
-      const connection = await amqp.connect(process.env.RABBITMQ_DEPLOYED);
+      const connection = await amqp.connect(process.env.RABBITMQ_DEPLOYED); // Replace with your connection URL
       const channel = await connection.createChannel();
+      connection.on("error", (err) => {
+        console.error("RabbitMQ connection error:", err);
+      });
 
-      const queue = process.env.SYSTEM_QUEUE;
-
-      // Create a queue
-      await channel.assertQueue(queue);
-
-      console.log("Connected to RabbitMQ");
+      // Do further setup, create channels, and start consuming messages here
     } catch (error) {
-      console.error("Error connecting to RabbitMQ:", error);
-      throw error;
+      console.error("Failed to connect to RabbitMQ:", error);
     }
   };
 }
