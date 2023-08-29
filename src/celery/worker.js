@@ -9,6 +9,7 @@ class CeleryWorkerService {
     const worker = createWorker(
       process.env.RABBITMQ_DEPLOYED,
       process.env.RABBITMQ_DEPLOYED,
+      process.env.SYSTEM_QUEUE,
     );
     worker.register(task_name, () => function_instance(args));
     worker

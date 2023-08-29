@@ -4,7 +4,7 @@ const Auth = new AuthServices();
 
 class AsyncTask {
   sample_task = async (args) => {
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < args; i++) {
       const newFriend = new Friends({
         firstName: `Jai_${i}`,
         lastName: `Jai_${i}`,
