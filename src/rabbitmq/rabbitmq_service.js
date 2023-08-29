@@ -14,7 +14,7 @@ class RabbitMQService {
       console.log("Connected to RabbitMQ");
     } catch (error) {
       console.error("Error connecting to RabbitMQ:", error);
-      throw error;
+      console.log("Rabbit MQ Error occurred", error);
     }
   };
 }

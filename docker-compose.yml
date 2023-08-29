@@ -1,0 +1,8 @@
+version: "3"
+services:
+  kepplr-node-service:
+    build : .
+    ports:
+      - "8000:8001"
+    environment:
+      - PORT=8001

@@ -40,6 +40,8 @@ async function startServer() {
     }),
   );
 
+  console.log("PORT >@ ", PORT);
+
   await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
 }
 startServer()
@@ -50,23 +52,21 @@ startServer()
   )
   .catch((err) => console.log(err));
 
-Slack.send_to_slack(
-  "Server Startup 🚀",
-  `Server has started successfully of type : ${process.env.NODE_ENV} ✅ `,
-  HttpStatus.OK,
-)
-  .then((r) => {
-    console.log("Slack running and communicating ✅ ");
-    console.log("Slack Startup Notification Sent 🚨 ");
-  })
-  .catch((err) => console.log("Slack failed ❌ ", err));
+// Slack.send_to_slack(
+//   "Server Startup 🚀",
+//   `Server has started successfully of environment : ${process.env.NODE_ENV} ✅ `,
+//   HttpStatus.OK,
+// )
+//   .then((r) => {
+//     console.log("Slack running and communicating ✅ ");
+//     console.log("Slack Startup Notification Sent 🚨 ");
+//   })
+//   .catch((err) => console.log("Slack failed ❌ ", err));
 
-const { connection, channel } = RMQ.connect()
+RMQ.connect()
   .then((r) => {
     console.log("Rabbit MQ Connection has been established.");
   })
   .catch((err) => {
     console.log("Failed to connect to Rabbit MQ.");
   });
-
-console.log(connection);
