@@ -15,7 +15,7 @@ class CeleryWorkerService {
     worker
       .start()
       .then((r) => {
-        console.log("Task Ongoing");
+        console.log("Task Ongoing > OK");
       })
       .catch((err) => {
         console.log("Task Error", err);
