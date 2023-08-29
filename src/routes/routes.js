@@ -14,7 +14,7 @@ router.get("/health", Auth.auth, async (req, res) => {
 });
 
 router.post("/test_task", (req, res) => {
-  Celery.send_task("sample_task", Task.sample_task, req.body.user_id);
+  Celery.send_task("sample_task", Task.sample_task, req.body["records"]);
   return res.status(200).send({
     endpoint: "OK",
   });

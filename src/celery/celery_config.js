@@ -5,6 +5,7 @@ class CeleryClientConfig {
     return createClient(
       process.env.RABBITMQ_DEPLOYED,
       process.env.RABBITMQ_DEPLOYED,
+      process.env.SYSTEM_QUEUE,
     );
   };
 }
