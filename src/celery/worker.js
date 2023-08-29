@@ -16,7 +16,7 @@ class CeleryWorkerService {
       .start()
       .then(() => {
         console.log(
-          `Celery Task Ongoing :: Task Name : > ${task_name} Args : > ${args}`,
+          `Latest BUILD Celery Task Ongoing :: Task Name : > ${task_name} Args : > ${args}`,
         );
       })
       .catch((err) => {
