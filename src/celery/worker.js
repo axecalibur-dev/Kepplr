@@ -15,10 +15,27 @@ class CeleryWorkerService {
     worker
       .start()
       .then((r) => {
-        console.log("Task Ongoing > OK");
+        console.log(
+          `|| Task Started :: Task Name :> ${task_name} Args :> ${args} ||`,
+        );
       })
       .catch((err) => {
-        console.log("Task Error", err);
+        console.log(
+          `|| Task Started :: Task Name :> ${task_name} Args :> ${args} Error :> ${err} ||`,
+        );
+      });
+
+    result
+      .get()
+      .then((data) => {
+        console.log(
+          `|| Task Completed :: Task Name :> ${task_name} Args :> ${args} Result :> ${data} ||`,
+        );
+      })
+      .catch((err) => {
+        console.log(
+          `|| Send Task Result Retrieval Error :: Task Name :> ${task_name} Args :> ${args} Error :> ${err} ||`,
+        );
       });
   };
 }
