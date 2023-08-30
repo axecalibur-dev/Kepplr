@@ -1,6 +1,10 @@
 version: "3"
 services:
   kepplr-node-service:
+    build:
+      context: .
+      args:
+        NODE_ENV: production
     env_file:
-      - ./.env
-    command: npm run start:prod
+      - ./.prod.env
+    command: npm run build:start:prod
