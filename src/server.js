@@ -16,6 +16,7 @@ import routes from "./routes/routes";
 import HttpStatus from "http-status-codes";
 import GlobalConstants from "./globals/constants/global_constants";
 import RabbitMQService from "./rabbitmq/rabbitmq_service";
+import RedisClient from "./redis/redis_config";
 const RMQ = new RabbitMQService();
 
 async function startServer() {
@@ -43,9 +44,6 @@ async function startServer() {
       context: async ({ req }) => req.headers,
     }),
   );
-
-  console.log("PORT >@ ", PORT);
-
   await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
 }
 startServer()
@@ -66,11 +64,11 @@ Slack.send_to_slack(
     console.log("Slack Startup Notification Sent 🚨 ");
   })
   .catch((err) => console.log("Slack failed ❌ ", err));
-
+RedisClient();
 RMQ.connect()
   .then((r) => {
-    console.log("Rabbit MQ Connection has been established.");
+    console.log("Rabbit MQ Connection has been established ✅ ");
   })
   .catch((err) => {
-    console.log("Failed to connect to Rabbit MQ.");
+    console.log("Failed to connect to Rabbit MQ ❌");
   });

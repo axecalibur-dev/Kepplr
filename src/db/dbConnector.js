@@ -20,8 +20,6 @@ mongoose
     process.exit(0);
   });
 
-const redisClient = Redis.connect();
-
 const Friends = mongoose.model("Friends", friendSchema);
 
-export { Friends, redisClient };
+export { Friends };
