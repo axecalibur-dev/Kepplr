@@ -8,7 +8,7 @@ class Utils {
 
   fire_password_reset_mail = async (email_address, otp) => {
     const transporter = await nodemailer.createTransport({
-      service: "outlook",
+      host: "smtppro.zoho.in",
       auth: {
         user: process.env.SERVICE_EMAIl,
         pass: process.env.SERVICE_EMAIl_PWD,
