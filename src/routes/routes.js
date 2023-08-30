@@ -14,10 +14,8 @@ router.get("/health", Auth.auth, async (req, res) => {
 
 router.post("/test_task", async (req, res) => {
   Celery.send_task("sample_task", Task.sample_task, req.body["records"]);
-  // MailService.mail();
-
   return res.status(200).send({
-    endpoint: "OK",
+    status: "OK",
   });
 });
 
