@@ -6,5 +6,7 @@ export const environment = {
     dbString: process.env.MONGO_SRV,
   },
 
-  production: {},
+  production: {
+    dbString: process.env.MONGO_SRV,
+  },
 };

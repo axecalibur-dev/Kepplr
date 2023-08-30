@@ -4,23 +4,20 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start:dev": "NODE_ENV=development nodemon --exec babel-node src/server.js",
-    "start:prod": "NODE_ENV=production babel-node dist/server.js",
+    "start:dev": "nodemon --exec babel-node src/server.js",
+    "start:prod": "node dist/server.js",
     "build": "babel src -d dist",
     "build:start:prod": "npm run build && npm run start:prod"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@babel/cli": "^7.22.10",
     "@babel/core": "^7.22.10",
     "@babel/node": "^7.22.10",
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-stage-0": "^7.8.3",
     "@types/node": "^15.0.3",
-    "prettier": "^3.0.1"
-  },
-  "dependencies": {
     "@apollo/server": "^4.9.1",
     "@slack/bolt": "^3.13.3",
     "amqplib": "^0.10.3",
@@ -40,7 +37,10 @@
     "mongoose": "^7.4.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.4",
-    "nodemon": "^3.0.1",
     "redis": "^4.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.1"
   }
 }
