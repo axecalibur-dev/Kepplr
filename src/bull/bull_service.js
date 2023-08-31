@@ -1,56 +1,22 @@
-import { Queue, Job } from "bullmq";
-import { Worker } from "bullmq";
+import { build_queue } from "./build_bull_queue";
+import { create_worker } from "./worker";
 import Utils from "../utils/utils";
-import { Friends } from "../db/dbConnector";
-import RedisClient from "../redis/redis_config";
+const Util = new Utils();
 
-const utils = new Utils();
-class Bull {
-  service = async () => {
-    // RedisClient().set("OP", "PO");
-    const va = {
-      host: process.env.REDIS_URL_DEPLOYED,
-      username: process.env.REDIS_USER,
-      password: process.env.REDIS_PWD,
-      port: 15104,
-      db: process.env.REDIS_DB_DEPLOYED,
-    };
-    const myQueue = new Queue("myqueue", {
-      connection: RedisClient(),
-    });
-
-    async function addJobs() {
-      await myQueue.add("myJobName", { foo: "bar" });
-      await myQueue.add("myJobName", { qux: "baz" });
-    }
-
-    await addJobs();
-
-    const worker = new Worker(
-      "myqueue",
-      async (job) => {
-        await job.updateProgress(42);
-
-        // Optionally sending an object as progress
-        await job.updateProgress({ foo: "bar" });
-        console.log(job.data);
-        console.log("RuNNING");
-
-        // Do something with job
-        return "some value";
-      },
-      {
-        connection: va,
-      },
+class BullMessageQueueService {
+  send_task = async (queue_name, job_name, function_instance, args) => {
+    const job_id = Util.generate_system_job_id(queue_name, job_name);
+    console.log(
+      `>> 🔄🚨Task Received :: Queue Name : ${queue_name} || Job Name : ${job_name} || Args : ${JSON.stringify(
+        args,
+      )} || System Generated Job ID : ${job_id} || `,
     );
-
-    worker.on("completed", (job) => {
-      console.log(`${job.id} has completed!`);
+    const myQueue = build_queue(queue_name);
+    await myQueue.add(job_name, args, {
+      jobId: job_id,
     });
 
-    worker.on("failed", (job, err) => {
-      console.log(`${job.id} has failed with ${err.message}`);
-    });
+    await create_worker(queue_name, function_instance, args, job_id);
   };
 }
-export default Bull;
+export default BullMessageQueueService;

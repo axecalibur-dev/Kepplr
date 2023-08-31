@@ -57,6 +57,5 @@ Slack.send_to_slack(
 )
   .then((r) => {
     console.log("Slack running and communicating ✅ ");
-    console.log("Slack Startup Notification Sent 🚨 ");
   })
   .catch((err) => console.log("Slack failed ❌ ", err));
