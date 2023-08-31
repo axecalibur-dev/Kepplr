@@ -1,3 +1,4 @@
 export const TaskRegistry = {
-  Sample_Db_Population: "sample_db_population_task",
+  Sample_Db_Population: "Sample_Db_Population_Task",
+  Send_Password_Recovery_Mail: "Send_Password_Recovery_Mail_Task",
 };
