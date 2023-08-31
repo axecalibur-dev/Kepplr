@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { environment } from "../config/config.js";
 import { friendSchema } from "./schema/friendSchema.js";
 
-const env = process.env.ENVIRONMENT;
+const env = process.env.NODE_ENV;
 mongoose
   .connect(environment[env].dbString, {
     useNewUrlParser: true,
