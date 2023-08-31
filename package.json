@@ -29,7 +29,6 @@
     "graphql": "^16.7.1",
     "graphql-tag": "^2.12.6",
     "http-status-codes": "^2.2.0",
-    "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.1",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.1",
