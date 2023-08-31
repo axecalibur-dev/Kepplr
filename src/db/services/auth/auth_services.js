@@ -4,9 +4,14 @@ import { Friends } from "../../dbConnector";
 import HttpStatus from "http-status-codes";
 import Utils from "../../../utils/utils";
 import GlobalConstants from "../../../globals/constants/global_constants";
+import { RegisteredQueues } from "../../../bull/queues";
+import { TaskRegistry } from "../../../bull/task_registry";
+import BullMessageQueueService from "../../../bull/bull_service";
+import ServiceTasks from "../../../bull/tasks/send_password_recovery_task";
 
 const utils = new Utils();
-
+const BullTasks = new BullMessageQueueService();
+const ServiceTask = new ServiceTasks();
 class AuthServices {
   build_token = (user) => {
     const access_token = jwt.sign(
@@ -70,26 +75,24 @@ class AuthServices {
       };
     }
 
-    const mail_fired = await utils.fire_password_reset_mail(
-      input.email,
-      system_otp,
+    await BullTasks.send_task(
+      RegisteredQueues.Service_Queue,
+      TaskRegistry.Send_Password_Recovery_Mail,
+      ServiceTask.send_password_recovery_mail_task,
+      [
+        {
+          input_email: input.email,
+          system_otp: system_otp,
+        },
+      ],
     );
 
-    if (mail_fired) {
-      return {
-        message: `A mail has been sent to ${input.email}`,
-        status: HttpStatus.OK,
-        data: null,
-        meta: {},
-      };
-    } else {
-      return {
-        message: `Could not send mail. Please try again later.`,
-        status: HttpStatus.OK,
-        data: null,
-        meta: {},
-      };
-    }
+    return {
+      message: `A mail has been sent to ${input.email}`,
+      status: HttpStatus.OK,
+      data: null,
+      meta: {},
+    };
   };
 
   initiate_reset_password_service = async (parent, { input }) => {
