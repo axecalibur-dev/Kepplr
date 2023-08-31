@@ -65,5 +65,11 @@ class Utils {
       `Cleaned Items : ${users["deletedCount"]} : From Model : Friends`,
     );
   };
+
+  generate_system_job_id = (queue_name, job_name) => {
+    const timestamp = new Date().toISOString();
+    const generatedString = `${queue_name}_${job_name}_${timestamp}`;
+    return generatedString;
+  };
 }
 export default Utils;
