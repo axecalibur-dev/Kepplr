@@ -41,14 +41,13 @@ const typeDefs = gql`
   }
 
   input SignupDTO {
-    id: ID
-    firstName: String
-    lastName: String
+    firstName: String!
+    lastName: String!
     password: String!
     gender: Gender
     language: String
     age: Int
-    email: String
+    email: String!
     contacts: [ContactInput]
   }
 
@@ -80,7 +79,7 @@ const typeDefs = gql`
   }
 
   input LoginDTO {
-    email: String
+    email: String!
     password: String!
   }
 
@@ -89,13 +88,14 @@ const typeDefs = gql`
   }
 
   input ResetPasswordDTO {
-    email: String
+    email: String!
   }
 
   input PasswordResetDTO {
-    password_request_otp: String
-    new_password: String
-    reenter_password: String
+    email: String!
+    password_request_otp: String!
+    new_password: String!
+    reenter_password: String!
   }
 
   type Query {

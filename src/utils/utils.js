@@ -24,6 +24,7 @@ class Utils {
             <h1>Need help with your password ?</h1>
             <p>Hello,</p>
             <p>We received a request to reset your password. Please use the following OTP to proceed:</p>
+            <p>Please note this OTP is valid only for the next 5 minutes.</p>
             <p><strong>${otp}</strong></p>
             <p>If you didn't request a password reset, you can safely ignore this email.</p>
             <p>Thank you,</p>
@@ -68,8 +69,7 @@ class Utils {
 
   generate_system_job_id = (queue_name, job_name) => {
     const timestamp = new Date().toISOString();
-    const generatedString = `${queue_name}_${job_name}_${timestamp}`;
-    return generatedString;
+    return `${queue_name}_${job_name}_${timestamp}`;
   };
 }
 export default Utils;
