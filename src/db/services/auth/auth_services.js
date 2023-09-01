@@ -8,6 +8,7 @@ import { RegisteredQueues } from "../../../bull/queues";
 import { TaskRegistry } from "../../../bull/task_registry";
 import BullMessageQueueService from "../../../bull/bull_service";
 import ServiceTasks from "../../../bull/tasks/send_password_recovery_task";
+import { redisService } from "../../../redis/redis";
 
 const utils = new Utils();
 const BullTasks = new BullMessageQueueService();
@@ -55,15 +56,9 @@ class AuthServices {
 
   reset_password = async (parent, { input }) => {
     const system_otp = await utils.generateRandomOTP();
-    const user = await Friends.findOneAndUpdate(
-      {
-        email: input.email,
-      },
-      {
-        requested_password_assistance: true,
-        password_request_otp: system_otp,
-      },
-    );
+    const user = await Friends.findOne({
+      email: input.email,
+    });
 
     if (!user) {
       console.log("No such user found.");
@@ -74,6 +69,13 @@ class AuthServices {
         meta: {},
       };
     }
+
+    const redis = await redisService();
+    await redis.setEx(
+      String(user.email),
+      process.env.REDIS_DEFAULT_EXPIRATION,
+      String(system_otp),
+    );
 
     await BullTasks.send_task(
       RegisteredQueues.Service_Queue,
@@ -96,34 +98,41 @@ class AuthServices {
   };
 
   initiate_reset_password_service = async (parent, { input }) => {
+    const redis = await redisService();
+    const otp = await redis.get(String(input.email));
+    if (!otp || otp !== input.password_request_otp) {
+      return {
+        message: "Invalid OTP. Please try again or resend OTP.",
+        status: HttpStatus.BAD_REQUEST,
+        data: null,
+        meta: {},
+      };
+    }
     const auth = new AuthServices();
     if (input["new_password"] === input["reenter_password"]) {
       const user = await Friends.findOneAndUpdate(
         {
-          password_request_otp: input.password_request_otp,
-          requested_password_assistance: true,
+          email: input.email,
         },
         {
-          requested_password_assistance: false,
-          password_request_otp: null,
           password: await auth.hash_password(input["new_password"]),
         },
       );
 
       if (!user) {
         return {
-          message: "Invalid OTP/ No request made.",
+          message: "Invalid credentials. Please try again.",
           status: HttpStatus.NOT_FOUND,
           data: null,
           meta: {},
         };
       } else {
+        await redis.del(String(input.email));
         return {
           message: "Password Updated",
           status: HttpStatus.OK,
           data: null,
           meta: {
-            otp: user.password_request_otp,
             email: user.email,
           },
         };

@@ -11,17 +11,12 @@ const Slack = new SlackService();
 const ApolloException = new ExceptionResponseBuilder();
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
-import routes from "./routes/routes";
 import HttpStatus from "http-status-codes";
 import GlobalConstants from "./globals/constants/global_constants";
-
+import { get_app } from "./app";
 async function startServer() {
-  const app = express();
+  const app = get_app();
   const httpServer = http.createServer(app);
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(`${GlobalConstants.REST_Endpoint}`, routes);
-
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -34,8 +29,6 @@ async function startServer() {
   app.use(
     `${GlobalConstants.GraphQL_Endpoint}`,
     cors(),
-    express.json(),
-    express.urlencoded({ extended: true }),
     expressMiddleware(server, {
       context: async ({ req }) => req.headers,
     }),
@@ -43,11 +36,18 @@ async function startServer() {
   await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
 }
 startServer()
-  .then((result) =>
+  .then((result) => {
     console.log(
-      `Graphql up and running [STABLE] , Build Type : ${process.env.NODE_ENV}, at http://localhost:${PORT}${GlobalConstants.GraphQL_Endpoint} 🌐 `,
-    ),
-  )
+      `Kepplr is up and running, deployment at https://www.kepplr.xyz 🌐 `,
+    );
+    console.log(
+      `Kepplr is up and running, Build Type : ${process.env.NODE_ENV}, GraphQL at http://localhost:${PORT}${GlobalConstants.GraphQL_Endpoint} 🌐 `,
+    );
+    console.log(
+      `REST at http://localhost:${PORT}${GlobalConstants.REST_Endpoint} 🌐 `,
+    );
+    console.log();
+  })
   .catch((err) => console.log(err));
 
 Slack.send_to_slack(

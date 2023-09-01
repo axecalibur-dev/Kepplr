@@ -19,16 +19,6 @@ export const friendSchema = new mongoose.Schema(
       type: String,
     },
 
-    requested_password_assistance: {
-      type: Boolean,
-      default: false,
-    },
-
-    password_request_otp: {
-      type: String,
-      default: null,
-    },
-
     firstName: {
       type: String,
       required: true,
@@ -67,10 +57,6 @@ export const friendSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
       default: {},
     },
-
-    // {^^^^^^^^^ format for oAuthCredentials
-    //    "open_api_id" : "google"/"facebook"
-    // }
   },
   { minimize: false },
 );

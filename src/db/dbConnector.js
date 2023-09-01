@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { environment } from "../config/config.js";
 import { friendSchema } from "./schema/friendSchema.js";
+import { taskPerformance } from "./schema/task_peformance_schema";
 
 const env = process.env.NODE_ENV;
 mongoose
@@ -19,5 +20,6 @@ mongoose
   });
 
 const Friends = mongoose.model("Friends", friendSchema);
+const TaskPerformance = mongoose.model("TaskPerformance", taskPerformance);
 
-export { Friends };
+export { Friends, TaskPerformance };

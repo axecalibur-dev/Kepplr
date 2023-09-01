@@ -25,24 +25,24 @@ export const resolvers = {
   },
 
   Mutation: {
-    sign_up: (parent, { input }) => {
-      return Controller.sign_up_user(parent, { input });
+    sign_up: async (parent, { input }) => {
+      return await Controller.sign_up_user(parent, { input });
     },
 
-    login: (parent, { input }, context, info) => {
-      return Controller.login_user(parent, { input }, context, info);
+    login: async (parent, { input }, context, info) => {
+      return await Controller.login_user(parent, { input }, context, info);
     },
 
-    reset_password: (parent, { input }) => {
-      return auth.reset_password(parent, { input });
+    reset_password: async (parent, { input }) => {
+      return await auth.reset_password(parent, { input });
     },
 
-    set_password: (parent, { input }) => {
-      return auth.initiate_reset_password_service(parent, { input });
+    set_password: async (parent, { input }) => {
+      return await auth.initiate_reset_password_service(parent, { input });
     },
 
     updateFriend: async (parent, { input }) => {
-      return Controller.update_user(parent, { input });
+      return await Controller.update_user(parent, { input });
     },
   },
 };
