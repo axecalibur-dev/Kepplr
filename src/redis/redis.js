@@ -2,8 +2,8 @@ import { createClient } from "redis";
 
 export const redisService = async () => {
   const client = createClient({
-    username: process.env.REDIS_USER, // use your Redis user. More info https://redis.io/docs/management/security/acl/
-    password: process.env.REDIS_PWD, // use your password here
+    username: process.env.REDIS_USER,
+    password: process.env.REDIS_PWD,
     database: process.env.REDIS_DB_DEPLOYED,
     socket: {
       host: process.env.REDIS_URL_DEPLOYED,
