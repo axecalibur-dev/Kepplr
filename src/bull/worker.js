@@ -11,7 +11,7 @@ export const create_worker = async (
   const worker = new Worker(
     queue_name,
     async (job) => {
-      return await function_instance(args);
+      return await function_instance(job.data);
     },
 
     {
