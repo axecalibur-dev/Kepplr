@@ -4,7 +4,6 @@ import http from "http";
 import cors from "cors";
 import { resolvers } from "./data/resolvers.graphql";
 import typeDefs from "./data/schema.graphql";
-import { PORT } from "./config/config";
 import ExceptionResponseBuilder from "./Exceptions/exception_builder";
 import SlackService from "./slack/slack_service";
 const Slack = new SlackService();
@@ -24,6 +23,8 @@ async function startServer() {
     formatError: (err) => {
       return ApolloException.throw_error_as_response(err);
     },
+    // introspection: true,
+    // playground: false,
   });
   await server.start();
   app.use(
@@ -33,7 +34,16 @@ async function startServer() {
       context: async ({ req }) => req.headers,
     }),
   );
-  await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
+
+  app.set("trust proxy", (ip) => {
+    if (ip === "127.0.0.1" || ip === "123.123.123.123")
+      return true; // trusted IPs
+    else return false;
+  });
+
+  await new Promise((resolve) =>
+    httpServer.listen({ port: process.env.PORT }, resolve),
+  );
 }
 startServer()
   .then((result) => {
@@ -41,10 +51,10 @@ startServer()
       `Kepplr is up and running, deployment at https://www.kepplr.xyz 🌐 `,
     );
     console.log(
-      `Kepplr is up and running, Build Type : ${process.env.NODE_ENV}, GraphQL at http://localhost:${PORT}${GlobalConstants.GraphQL_Endpoint} 🌐 `,
+      `Kepplr is up and running, Build Type : ${process.env.NODE_ENV}, GraphQL at http://localhost:${process.env.PORT}${GlobalConstants.GraphQL_Endpoint} 🌐 `,
     );
     console.log(
-      `REST at http://localhost:${PORT}${GlobalConstants.REST_Endpoint} 🌐 `,
+      `REST at http://localhost:${process.env.PORT}${GlobalConstants.REST_Endpoint} 🌐 `,
     );
     console.log();
   })

@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
-import { environment } from "../config/config.js";
 import { friendSchema } from "./schema/friendSchema.js";
 import { taskPerformance } from "./schema/task_peformance_schema";
 
 const env = process.env.NODE_ENV;
+// const connectionString = environment[env].dbString;
+// console.log(process.env.MONGO_INITDB_ROOT_PASSWORD);
+// const connectionString = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@mongo-container:27017/?authSource=admin`;
+
+const connectionString = `${process.env.MONGO_CONNECTION_PREFIX}://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PWD}@${process.env.MONGO_DB_IP}/${process.env.MONGO_CONNECT_SUFFIX}`;
 mongoose
-  .connect(environment[env].dbString, {
+  .connect(connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
