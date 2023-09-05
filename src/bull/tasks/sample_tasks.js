@@ -1,4 +1,4 @@
-import { Friends } from "../../db/dbConnector";
+import { Friends } from "../../db/schema/friendSchema";
 
 class SampleTasks {
   sample_db_population_task = async (args) => {
