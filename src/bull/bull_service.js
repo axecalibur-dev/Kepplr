@@ -1,7 +1,6 @@
 import { build_queue } from "./build_bull_queue";
 import { create_worker } from "./worker";
 import Utils from "../utils/utils";
-import { TaskPerformance } from "../db/dbConnector";
 const Util = new Utils();
 
 class BullMessageQueueService {

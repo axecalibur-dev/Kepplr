@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { Friends } from "../../dbConnector";
 import HttpStatus from "http-status-codes";
 import Utils from "../../../utils/utils";
 import GlobalConstants from "../../../globals/constants/global_constants";
@@ -9,6 +8,7 @@ import { TaskRegistry } from "../../../bull/task_registry";
 import BullMessageQueueService from "../../../bull/bull_service";
 import ServiceTasks from "../../../bull/tasks/send_password_recovery_task";
 import { redisService } from "../../../redis/redis";
+import { Friends } from "../../schema/friendSchema";
 
 const utils = new Utils();
 const BullTasks = new BullMessageQueueService();

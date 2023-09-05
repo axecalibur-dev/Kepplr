@@ -1,6 +1,5 @@
 import { Worker } from "bullmq";
 import { redisOptions } from "../redis/redis";
-import { TaskPerformance } from "../db/dbConnector";
 
 export const create_worker = async (
   queue_name,

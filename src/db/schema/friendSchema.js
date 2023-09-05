@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const friendSchema = new mongoose.Schema(
+const friendSchema = new mongoose.Schema(
   {
     created_at: {
       type: Date,
@@ -60,3 +60,5 @@ export const friendSchema = new mongoose.Schema(
   },
   { minimize: false },
 );
+
+export const Friends = mongoose.model("Friends", friendSchema);

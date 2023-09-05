@@ -1,4 +1,3 @@
-import { Friends } from "../dbConnector";
 import HttpStatus from "http-status-codes";
 import bcrypt from "bcrypt";
 import AuthServices from "./auth/auth_services";
@@ -9,6 +8,7 @@ const APIResponse = new APIResponseBuilder();
 const Slack = new SlackService();
 
 import { GraphQLError } from "graphql";
+import { Friends } from "../schema/friendSchema";
 
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
