@@ -15,13 +15,25 @@ export const create_worker = async (
     },
 
     {
+      limiter: {
+        max: 1,
+        duration: 10000,
+      },
+      concurrency: 10,
       connection: redisOptions(),
     },
   );
 
   console.log(`>> 🔄 👷 Workers Deployed for ${job_id}`);
 
-  worker.on("completed", (job, result) => {
+  worker.on("error", (err) => {
+    console.log(
+      `🔄 ⚠️  Job with SysID ${job.id} has encountered an error. Error : ${err}`,
+    );
+  });
+
+  worker.on("completed", async (job, result) => {
+    await worker.close();
     console.log(
       `>> 🔄 ✅  Job with SysID ${job.id} has completed. The handler returned the following response : ${result}`,
     );

@@ -5,6 +5,7 @@ import BullMessageQueueService from "../bull/bull_service";
 import { RegisteredQueues } from "../bull/queues";
 import { TaskRegistry } from "../bull/task_registry";
 import SampleTasks from "../bull/tasks/sample_tasks";
+import { express_limiter } from "../data/rate_limit";
 const Auth = new AuthMiddleware();
 
 const BullTasks = new BullMessageQueueService();
@@ -16,7 +17,7 @@ router.get("/health", Auth.auth, async (req, res) => {
   });
 });
 
-router.post("/test_task", async (req, res) => {
+router.post("/test_task", express_limiter, async (req, res) => {
   await BullTasks.send_task(
     RegisteredQueues.Fault_Tolerance,
     TaskRegistry.Sample_Db_Population,
