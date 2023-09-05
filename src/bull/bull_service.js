@@ -15,8 +15,8 @@ class BullMessageQueueService {
     const myQueue = build_queue(queue_name);
     await myQueue.add(job_name, args, {
       jobId: job_id,
+      removeOnComplete: true,
     });
-
     await create_worker(queue_name, function_instance, args, job_id);
   };
 }
