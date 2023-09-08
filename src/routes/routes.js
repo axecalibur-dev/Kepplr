@@ -6,12 +6,14 @@ import { RegisteredQueues } from "../bull/queues";
 import { TaskRegistry } from "../bull/task_registry";
 import SampleTasks from "../bull/tasks/sample_tasks";
 import { express_limiter } from "../data/rate_limit";
+import { TaskLogger } from "../models/task_logger";
 const Auth = new AuthMiddleware();
 
 const BullTasks = new BullMessageQueueService();
 const ST = new SampleTasks();
 router.get("/health", Auth.auth, async (req, res) => {
   // console.log("Health Check");
+
   return res.status(200).send({
     healthCheck: "OK",
   });

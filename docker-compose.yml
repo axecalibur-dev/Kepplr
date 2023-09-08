@@ -30,8 +30,18 @@ services:
       - redis-data:/data
     ports:
       - "6379:6379"
-
-
+  postgres-container:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgres/data
+    environment:
+      - POSTGRES_USER=kepplr_development_user
+      - POSTGRES_PASSWORD=kepplr_development_pwd
+      - POSTGRES_DB=kepplr_development
+      - POSTGRES_HOST_AUTH_METHOD=password
 volumes:
   mongo_db:
   redis-data:
+  postgres-data:

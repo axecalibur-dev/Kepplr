@@ -12,7 +12,7 @@ import GlobalConstants from "./globals/constants/global_constants";
 import typeDefs from "./data/schema.graphql";
 import { resolvers } from "./data/resolvers.graphql";
 import { expressMiddleware } from "@apollo/server/express4";
-import { mongo_connect_string } from "./db/connection";
+import { connect_to_databases } from "./db/connection";
 import { get_app } from "./app";
 
 const Slack = new SlackService();
@@ -61,20 +61,7 @@ async function startServer() {
     );
   });
 
-  await connectToMongoDB();
-}
-
-async function connectToMongoDB() {
-  try {
-    await mongoose.connect(mongo_connect_string(), {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("Atlas connection established. 💽");
-  } catch (error) {
-    console.error("DB Connection Failed ❌", error);
-    process.exit(1); // Exit the application on DB connection failure
-  }
+  await connect_to_databases();
 }
 
 startServer()

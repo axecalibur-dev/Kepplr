@@ -1,5 +1,8 @@
 import { Worker } from "bullmq";
 import { redisOptions } from "../redis/redis";
+import { TaskLogger } from "../models/task_logger";
+import { TaskRegistry } from "./task_registry";
+import { DataTypes } from "sequelize";
 
 export const create_worker = async (
   queue_name,
@@ -23,6 +26,14 @@ export const create_worker = async (
     },
   );
 
+  const task = await TaskLogger.create({
+    job_id: job_id,
+    queue_name: queue_name,
+    job_name: TaskRegistry.Send_Password_Recovery_Mail,
+    args: {
+      arg: args,
+    },
+  });
   console.log(`>> 🔄 👷 Workers Deployed for ${job_id}`);
 
   worker.on("error", (err) => {
