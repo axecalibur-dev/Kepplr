@@ -7,7 +7,7 @@ export const mongo_connect_string = () => {
 };
 
 export const postgres_connect_string = () => {
-  return `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@postgres-container:5432/${process.env.POSTGRES_DB}`;
+  return `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`;
 };
 
 // Define the Sequelize instance

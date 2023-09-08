@@ -9,6 +9,7 @@ export const create_worker = async (
   function_instance,
   args,
   job_id,
+  job_name,
 ) => {
   const worker = new Worker(
     queue_name,
@@ -29,7 +30,7 @@ export const create_worker = async (
   const task = await TaskLogger.create({
     job_id: job_id,
     queue_name: queue_name,
-    job_name: TaskRegistry.Send_Password_Recovery_Mail,
+    job_name: job_name,
     args: {
       arg: args,
     },
