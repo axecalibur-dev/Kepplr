@@ -36,7 +36,10 @@
     "mongoose": "^7.4.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.4",
-    "redis": "^4.6.8"
+    "pg": "^8.11.3",
+    "redis": "^4.6.8",
+    "sequelize": "^6.33.0",
+    "sequelize-cli": "^6.6.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",
