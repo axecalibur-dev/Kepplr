@@ -16,7 +16,7 @@ class BullMessageQueueService {
       jobId: job_id,
       removeOnComplete: true,
     });
-    await create_worker(queue_name, function_instance, args, job_id);
+    await create_worker(queue_name, function_instance, args, job_id, job_name);
   };
 }
 export default BullMessageQueueService;
