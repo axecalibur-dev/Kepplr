@@ -5,6 +5,7 @@ class ServiceTasks {
     const mail_fired = await utils.fire_password_reset_mail(
       args[0]["input_email"],
       args[0]["system_otp"],
+      args[0]["user_name"],
     );
 
     if (mail_fired) {
