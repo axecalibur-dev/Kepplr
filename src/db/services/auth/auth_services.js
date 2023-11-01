@@ -85,6 +85,7 @@ class AuthServices {
         {
           input_email: input.email,
           system_otp: system_otp,
+          user_name: user.firstName,
         },
       ],
     );

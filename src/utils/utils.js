@@ -6,7 +6,7 @@ class Utils {
     return error_message.replace(/Path/g, "Value").replace(/`/g, "");
   };
 
-  fire_password_reset_mail = async (email_address, otp) => {
+  fire_password_reset_mail = async (email_address, otp, user_name) => {
     const transporter = await nodemailer.createTransport({
       host: "smtppro.zoho.in",
       auth: {
@@ -16,17 +16,18 @@ class Utils {
     });
 
     const template = `<!DOCTYPE html>
-          <html lang="">
+         <html lang="">
           <head>
-            <title>Kepplr | Password Reset Email</title>
+            <title>Kepplr | Password Reset Email </title>
           </head>
           <body>
-            <h1>Need help with your password ?</h1>
-            <p>Hello,</p>
+            <h1>Kepplr Assistance | Need help with your password ?</h1>
+            <p>Hello ${user_name}</p>
             <p>We received a request to reset your password. Please use the following OTP to proceed:</p>
             <p>Please note this OTP is valid only for the next 5 minutes.</p>
             <p><strong>${otp}</strong></p>
             <p>If you didn't request a password reset, you can safely ignore this email.</p>
+<br>
             <p>Thank you,</p>
             <p>Kepplr</p>
           </body>
