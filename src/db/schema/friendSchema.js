@@ -14,8 +14,19 @@ const friendSchema = new mongoose.Schema(
     },
     company: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: "Company",
+    },
+    isPrivateAccount: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+
+    sharePrimaryContactEmail: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     email: {
       type: String,

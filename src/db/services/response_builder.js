@@ -13,20 +13,24 @@ class APIResponseBuilder {
     };
   };
 
-  company_response = async (message, meta) => {
-    return {
-      message: message || "Success",
-      status: HttpStatus.OK,
-      data: [current_company],
-      meta: meta,
-    };
-  };
+  // company_response = async (message, meta) => {
+  //   return {
+  //     message: message || "Success",
+  //     status: HttpStatus.OK,
+  //     data: [current_company],
+  //     meta: meta,
+  //   };
+  // };
 
-  relationship_response = async (message, meta) => {
+  relationship_response = async (message, meta, data) => {
+    // console.log("data");
+    // console.log(data);
+    // console.log("data");
     return {
       message: message || "Success",
       status: HttpStatus.OK,
-      meta: meta,
+      meta: meta || {},
+      data: data || [],
     };
   };
 

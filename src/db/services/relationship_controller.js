@@ -42,6 +42,7 @@ class RelationshipController {
     return APIResponse.relationship_response(
       "You are now following this person",
       {},
+      [],
     );
   };
   unfollow_someone = async (
@@ -73,6 +74,7 @@ class RelationshipController {
       return APIResponse.relationship_response(
         "You have unfollowed this person",
         {},
+        [],
       );
     } else {
       throw new GraphQLError("You are not following this person.", {
@@ -81,6 +83,28 @@ class RelationshipController {
           status: HttpStatus.BAD_REQUEST,
         },
       });
+    }
+  };
+
+  my_followers = async (parent, { input }, context, info, decoded_token) => {
+    // console.log(decoded_token);
+    // check if self following, reject
+
+    const existing = await Relationships.find({
+      personA: decoded_token.friend_id,
+    }).populate("personB", " -_id firstName lastName");
+
+    console.log(existing);
+    if (existing.length === 0) {
+      return APIResponse.relationship_response("You have 0 followers", {});
+    } else {
+      const followers = existing.map((relationship) => relationship.personB);
+      // console.log(followers);
+      return APIResponse.relationship_response(
+        `You have ${existing.length} followers.`,
+        {},
+        followers,
+      );
     }
   };
 }
