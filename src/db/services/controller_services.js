@@ -23,6 +23,7 @@ class ControllerServices {
         gender: input.gender,
         language: input.language,
         age: input.age,
+        company: input.company,
         email: input.email,
         contacts: input.contacts,
         password: await Auth.hash_password(input.password),
@@ -136,7 +137,8 @@ class ControllerServices {
     try {
       const current_friends = await Friends.findById({
         _id: decoded_token.friend_id,
-      });
+      }).populate("company");
+
       if (current_friends == null)
         return {
           message: "No data found",

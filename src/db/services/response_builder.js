@@ -12,6 +12,31 @@ class APIResponseBuilder {
       meta: meta,
     };
   };
+
+  company_response = async (message, meta) => {
+    return {
+      message: message || "Success",
+      status: HttpStatus.OK,
+      data: [current_company],
+      meta: meta,
+    };
+  };
+
+  relationship_response = async (message, meta) => {
+    return {
+      message: message || "Success",
+      status: HttpStatus.OK,
+      meta: meta,
+    };
+  };
+
+  tweet_response = async (message, meta) => {
+    return {
+      message: message || "Success",
+      status: HttpStatus.OK,
+      meta: meta,
+    };
+  };
 }
 
 export default APIResponseBuilder;

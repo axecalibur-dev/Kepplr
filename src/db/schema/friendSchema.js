@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
+import { Company } from "./companySchema";
 
 const friendSchema = new mongoose.Schema(
   {
@@ -9,6 +11,11 @@ const friendSchema = new mongoose.Schema(
     updated_at: {
       type: Date,
       default: Date.now,
+    },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Company",
     },
     email: {
       type: String,
