@@ -130,9 +130,17 @@ const typeDefs = gql`
     meta: JSON_Object
   }
 
+  type RelationshipResponse {
+    message: String
+    status: String
+    data: [Friend]
+    meta: JSON_Object
+  }
+
   type Query {
     regenerate_token: SignupResponse
     profile: QueryFriendResponse
+    my_followers: RelationshipResponse
   }
 
   input PostTweetDTO {
@@ -157,6 +165,7 @@ const typeDefs = gql`
     message: String
     status: String
     meta: JSON_Object
+    data: [[Friend]]
   }
 
   type Mutation {

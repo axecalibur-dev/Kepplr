@@ -35,6 +35,16 @@ export const resolvers = {
         info,
       );
     },
+
+    my_followers: async (parent, args, context, info) => {
+      return await RelationshipController.my_followers(
+        parent,
+        args,
+        context,
+        info,
+        auth.verifyToken(context.authorization),
+      );
+    },
   },
 
   Mutation: {
@@ -119,6 +129,7 @@ export const resolvers = {
         auth.verifyToken(context.authorization),
       );
     },
+
     // my followers
     // people i follow
   },
