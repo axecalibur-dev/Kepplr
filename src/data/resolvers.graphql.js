@@ -1,6 +1,14 @@
 import AuthServices from "../db/services/auth/auth_services";
 import ControllerServices from "../db/services/controller_services";
 const Controller = new ControllerServices();
+
+import CompanyControllers from "../db/services/company_controller";
+import RelationshipControllers from "../db/services/relationship_controller";
+import TweetControllers from "../db/services/tweet_controller";
+const CompanyController = new CompanyControllers();
+const TweetController = new TweetControllers();
+const RelationshipController = new RelationshipControllers();
+
 import { getGraphQLRateLimiter } from "graphql-rate-limit";
 import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";
@@ -58,5 +66,60 @@ export const resolvers = {
     updateFriend: async (parent, args) => {
       return await Controller.update_user(parent, args);
     },
+
+    // company specific routes
+
+    add_company: async (parent, args, context, info) => {
+      return await CompanyController.create_new_company(parent, args);
+    },
+
+    // tweet specific routes
+
+    post_tweet: async (parent, args, context, info) => {
+      return await TweetController.post_a_new_tweet(
+        parent,
+        args,
+        context,
+        info,
+        auth.verifyToken(context.authorization),
+      );
+    },
+
+    delete_tweet: async (parent, args, context, info) => {
+      return await TweetController.delete_tweet(
+        parent,
+        args,
+        context,
+        info,
+        auth.verifyToken(context.authorization),
+      );
+    },
+
+    // relationship specific routes
+
+    // follow_someone
+
+    follow_someone: async (parent, args, context, info) => {
+      return await RelationshipController.follow_someone(
+        parent,
+        args,
+        context,
+        info,
+        auth.verifyToken(context.authorization),
+      );
+    },
+    // unfollow someone
+
+    unfollow_someone: async (parent, args, context, info) => {
+      return await RelationshipController.unfollow_someone(
+        parent,
+        args,
+        context,
+        info,
+        auth.verifyToken(context.authorization),
+      );
+    },
+    // my followers
+    // people i follow
   },
 };

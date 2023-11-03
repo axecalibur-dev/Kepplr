@@ -21,7 +21,20 @@ const typeDefs = gql`
     language: String
     age: Int
     email: String
+    company: Company
     contacts: [Contact]
+  }
+
+  type Company {
+    id: ID
+    company_name: String!
+    email: String!
+    building: String!
+    locality: String!
+    city: String!
+    state: String!
+    primary_contact: String!
+    secondary_contact: String!
   }
 
   input ContactInput {
@@ -44,6 +57,7 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     password: String!
+    company: String!
     gender: Gender
     language: String
     age: Int
@@ -98,9 +112,51 @@ const typeDefs = gql`
     reenter_password: String!
   }
 
+  input CreateCompanyDTO {
+    company_name: String!
+    email: String!
+    building: String!
+    locality: String!
+    city: String!
+    state: String!
+    primary_contact: String!
+    secondary_contact: String!
+  }
+
+  type CompanyResponse {
+    message: String
+    status: String
+    data: [Company]
+    meta: JSON_Object
+  }
+
   type Query {
     regenerate_token: SignupResponse
     profile: QueryFriendResponse
+  }
+
+  input PostTweetDTO {
+    tweet_string: String
+  }
+
+  input TweetDeleteDTO {
+    tweet_id: String
+  }
+
+  input FollowDTO {
+    now_following_id: String
+  }
+
+  type TweetResponse {
+    message: String
+    status: String
+    meta: JSON_Object
+  }
+
+  type FollowResponse {
+    message: String
+    status: String
+    meta: JSON_Object
   }
 
   type Mutation {
@@ -109,6 +165,11 @@ const typeDefs = gql`
     login(input: LoginDTO): SignupResponse
     reset_password(input: ResetPasswordDTO): MutationFriendResponse
     set_password(input: PasswordResetDTO): MutationFriendResponse
+    add_company(input: CreateCompanyDTO): CompanyResponse
+    post_tweet(input: PostTweetDTO): TweetResponse
+    delete_tweet(input: TweetDeleteDTO): TweetResponse
+    follow_someone(input: FollowDTO): FollowResponse
+    unfollow_someone(input: FollowDTO): FollowResponse
   }
 `;
 
