@@ -41,6 +41,18 @@ class APIResponseBuilder {
       meta: meta,
     };
   };
+
+  feed_response = async (message, meta, data) => {
+    // console.log("data");
+    // console.log(data);
+    // console.log("data");
+    return {
+      message: message || "Success",
+      status: HttpStatus.OK,
+      meta: meta || {},
+      data: data || [],
+    };
+  };
 }
 
 export default APIResponseBuilder;
