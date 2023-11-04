@@ -25,6 +25,17 @@ const typeDefs = gql`
     contacts: [Contact]
   }
 
+  type Post {
+    id: ID
+    created_at: String
+    updated_at: String
+    friend: Friend
+    post_string: String
+    likes: Int
+    retweets: Int
+    isReplyTweet: Boolean
+  }
+
   type Company {
     id: ID
     company_name: String!
@@ -140,7 +151,8 @@ const typeDefs = gql`
   type Query {
     regenerate_token: SignupResponse
     profile: QueryFriendResponse
-    my_followers: RelationshipResponse
+    people_i_follow: RelationshipResponse
+    people_who_follow_me: RelationshipResponse
   }
 
   input PostTweetDTO {
@@ -165,7 +177,21 @@ const typeDefs = gql`
     message: String
     status: String
     meta: JSON_Object
-    data: [[Friend]]
+    data: [Friend]
+  }
+  enum FeedTypeEnum {
+    PUBLIC
+    SPECIFIC
+  }
+  input HomeDTO {
+    feed_type: FeedTypeEnum
+  }
+
+  type FeedCollectiveResponse {
+    message: String
+    status: String
+    meta: JSON_Object
+    data: [Post]
   }
 
   type Mutation {
@@ -179,6 +205,7 @@ const typeDefs = gql`
     delete_tweet(input: TweetDeleteDTO): TweetResponse
     follow_someone(input: FollowDTO): FollowResponse
     unfollow_someone(input: FollowDTO): FollowResponse
+    home(input: HomeDTO): FeedCollectiveResponse
   }
 `;
 

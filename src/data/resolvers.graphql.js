@@ -4,10 +4,12 @@ const Controller = new ControllerServices();
 
 import CompanyControllers from "../db/services/company_controller";
 import RelationshipControllers from "../db/services/relationship_controller";
+import HomeControllers from "../db/services/feed_controller";
 import TweetControllers from "../db/services/tweet_controller";
 const CompanyController = new CompanyControllers();
 const TweetController = new TweetControllers();
 const RelationshipController = new RelationshipControllers();
+const HomeController = new HomeControllers();
 
 import { getGraphQLRateLimiter } from "graphql-rate-limit";
 import { GraphQLError } from "graphql/index";
@@ -36,8 +38,18 @@ export const resolvers = {
       );
     },
 
-    my_followers: async (parent, args, context, info) => {
-      return await RelationshipController.my_followers(
+    people_i_follow: async (parent, args, context, info) => {
+      return await RelationshipController.people_i_follow(
+        parent,
+        args,
+        context,
+        info,
+        auth.verifyToken(context.authorization),
+      );
+    },
+
+    people_who_follow_me: async (parent, args, context, info) => {
+      return await RelationshipController.people_who_follow_me(
         parent,
         args,
         context,
@@ -132,5 +144,16 @@ export const resolvers = {
 
     // my followers
     // people i follow
+
+    // feed specific routes
+    home: async (parent, args, context, info) => {
+      return await HomeController.get_home_feed(
+        parent,
+        args,
+        context,
+        info,
+        auth.verifyToken(context.authorization),
+      );
+    },
   },
 };
