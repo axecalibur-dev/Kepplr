@@ -53,7 +53,7 @@ const friendSchema = new mongoose.Schema(
     },
 
     age: {
-      type: String,
+      type: Number,
     },
 
     language: {
