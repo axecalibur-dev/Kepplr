@@ -9,6 +9,8 @@ const Slack = new SlackService();
 
 import { GraphQLError } from "graphql";
 import { Friends } from "../schema/friendSchema";
+import ProfilePictureController from "../../repository/media/profile_pictures/profile_picture_controller";
+const ProfilePicture = new ProfilePictureController();
 
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
@@ -23,6 +25,7 @@ class ControllerServices {
         gender: input.gender,
         language: input.language,
         age: input.age,
+        profile_picture: await ProfilePicture.default_profile_picture(),
         company: input.company,
         email: input.email,
         contacts: input.contacts,

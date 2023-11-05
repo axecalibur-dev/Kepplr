@@ -1,5 +1,6 @@
 import { Friends } from "../../db/schema/friendSchema";
-
+import ProfilePictureController from "../../repository/media/profile_pictures/profile_picture_controller";
+const ProfilePicture = new ProfilePictureController();
 class SampleTasks {
   sample_db_population_task = async (args) => {
     for (let i = 0; i < parseInt(args[0]); i++) {
@@ -13,6 +14,7 @@ class SampleTasks {
         email: `Jai_${i}_${Math.random()}`,
         contacts: `Jai_${i}`,
         password: `Jai_${i}`,
+        profile_picture: await ProfilePicture.default_profile_picture(),
       });
 
       const current_friend = await newFriend.save();
