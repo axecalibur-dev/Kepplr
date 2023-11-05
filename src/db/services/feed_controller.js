@@ -7,8 +7,11 @@ class FeedController {
   get_home_feed = async (parent, { input }, context, info, decoded_token) => {
     if (input["feed_type"] == "PUBLIC") {
       const feed = await Posts.find({})
-        .populate("friend", "firstName lastName")
-        .sort("-created_at");
+        .populate("friend", "firstName email profile_picture lastName")
+        .sort("-created_at")
+        .skip((input.page - 1) * input["page_size"]) // Skip documents for previous pages
+        .limit(input["page_size"]); // Limit the number of documents for the current page
+
       return APIResponse.feed_response("Feed generated.", {}, feed);
     } else if (input["feed_type"] == "SPECIFIC") {
       // const aggregationPipeline = [

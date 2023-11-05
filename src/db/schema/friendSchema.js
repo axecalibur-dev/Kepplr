@@ -22,6 +22,11 @@ const friendSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    profile_picture: {
+      type: String,
+      required: true,
+      default: "#noimage",
+    },
 
     sharePrimaryContactEmail: {
       type: Boolean,

@@ -18,6 +18,7 @@ const typeDefs = gql`
     firstName: String
     lastName: String
     gender: Gender
+    profile_picture: String
     language: String
     age: Int
     email: String
@@ -69,6 +70,7 @@ const typeDefs = gql`
     lastName: String!
     password: String!
     company: String!
+    profile_picture: String
     gender: Gender
     language: String
     age: Int
@@ -185,6 +187,8 @@ const typeDefs = gql`
   }
   input HomeDTO {
     feed_type: FeedTypeEnum
+    page: Int
+    page_size: Int
   }
 
   type FeedCollectiveResponse {
@@ -192,6 +196,8 @@ const typeDefs = gql`
     status: String
     meta: JSON_Object
     data: [Post]
+    page: Int
+    page_size: Int
   }
 
   type Mutation {
