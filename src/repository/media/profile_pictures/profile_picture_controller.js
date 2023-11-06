@@ -1,5 +1,3 @@
-// import images from "./pictures.json";
-
 class ProfilePictureController {
   default_profile_picture = async () => {
     const randomDecimal = Math.random();

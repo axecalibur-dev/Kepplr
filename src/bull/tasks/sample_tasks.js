@@ -6,7 +6,7 @@ const ProfilePicture = new ProfilePictureController();
 class SampleTasks {
   sample_db_population_task = async (args) => {
     for (let i = 0; i < parseInt(args[0]); i++) {
-      console.log(i);
+      // console.log(i);
       const newFriend = new Friends({
         firstName: `Jai_${i}`,
         lastName: `Jai_${i}`,
@@ -23,7 +23,7 @@ class SampleTasks {
       const currentFriend = await Friends.findOne({
         email: "jai@gmail.com",
       });
-      console.log(currentFriend);
+      // console.log(currentFriend);
       const relation = new Relationships({
         personA: currentFriend.id,
         personB: current_friend.id,
