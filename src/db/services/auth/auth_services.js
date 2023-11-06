@@ -15,7 +15,7 @@ const BullTasks = new BullMessageQueueService();
 const ServiceTask = new ServiceTasks();
 class AuthServices {
   build_token = (user) => {
-    console.log(process.env.JWT_SECRET);
+    // console.log(process.env.JWT_SECRET);
     const access_token = jwt.sign(
       {
         token_type: "Bearer/Access",
