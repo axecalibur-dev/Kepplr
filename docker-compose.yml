@@ -41,7 +41,15 @@ services:
       - POSTGRES_PASSWORD=kepplr_development_pwd
       - POSTGRES_DB=kepplr_development
       - POSTGRES_HOST_AUTH_METHOD=password
+  memcached-container:
+    image: memcached
+    ports:
+      - "11211:11211"
+    volumes:
+      - memcached-data:/var/lib/memcached
+
 volumes:
   mongo_db:
   redis-data:
   postgres-data:
+  memcached-data:

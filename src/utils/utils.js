@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import { Friends } from "../db/schema/friendSchema";
+import { redisService } from "../redis/redis";
 class Utils {
   format_error_message = (error_message) => {
     return error_message.replace(/Path/g, "Value").replace(/`/g, "");
@@ -151,6 +152,15 @@ class Utils {
   generate_system_job_id = (queue_name, job_name) => {
     const timestamp = new Date().toISOString();
     return `${queue_name}_${job_name}_${timestamp}`;
+  };
+
+  set_relationship_count = async (decoded_token) => {
+    const redis = await redisService();
+    await redis.setEx(
+      String(user.email),
+      process.env.REDIS_DEFAULT_EXPIRATION,
+      String(system_otp),
+    );
   };
 }
 export default Utils;

@@ -19,7 +19,7 @@ router.get("/health", Auth.auth, async (req, res) => {
   });
 });
 
-router.post("/test_task", express_limiter, async (req, res) => {
+router.post("/test_task", async (req, res) => {
   await BullTasks.send_task(
     RegisteredQueues.Fault_Tolerance,
     TaskRegistry.Sample_Db_Population,

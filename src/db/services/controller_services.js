@@ -18,8 +18,11 @@ import BullMessageQueueService from "../../bull/bull_service";
 const BullTasks = new BullMessageQueueService();
 
 import MarketingTasks from "../../bull/tasks/send_welcome_email_task";
+import MemcachedService from "../../memcached/memcached_service";
 
 const MarketingTask = new MarketingTasks();
+
+const Memcached = new MemcachedService();
 
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
@@ -56,6 +59,8 @@ class ControllerServices {
         ],
       );
       //
+
+      // console.log(memcached);
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
