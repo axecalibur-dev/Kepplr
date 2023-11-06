@@ -49,6 +49,86 @@ class Utils {
     }
   };
 
+  fire_welcome_mail = async (email_address, user_name) => {
+    const transporter = await nodemailer.createTransport({
+      host: "smtppro.zoho.in",
+      auth: {
+        user: process.env.SERVICE_EMAIl,
+        pass: process.env.SERVICE_EMAIl_PWD,
+      },
+    });
+
+    const template = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Kepplr</title>
+  <style>
+    /* Inline CSS for better email client compatibility */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      font-size: 16px;
+      color: #555;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Kepplr, ${user_name} </h1>
+    <p>Thank you for joining Kepplr. We are excited to have you on board!</p>
+    <p>Explore the app and start enjoying the features we have to offer.</p>
+    <a class="button" href="https://www.kepplr.xyz/"> Get Started </a>
+  </div>
+</body>
+</html>
+
+        `;
+
+    const mailOptions = {
+      from: process.env.SERVICE_EMAIl,
+      to: email_address,
+      subject: "Welcome to Kepplr ! ",
+      html: template,
+    };
+    try {
+      await transporter.sendMail(mailOptions);
+      return true; // Email sent successfully
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return false; // Failed to send email
+    }
+  };
+
   generateRandomOTP = () => {
     const min = 100000; // Minimum 6-digit number (100000)
     const max = 999999; // Maximum 6-digit number (999999)

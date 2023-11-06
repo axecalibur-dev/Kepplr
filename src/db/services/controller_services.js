@@ -10,7 +10,16 @@ const Slack = new SlackService();
 import { GraphQLError } from "graphql";
 import { Friends } from "../schema/friendSchema";
 import ProfilePictureController from "../../repository/media/profile_pictures/profile_picture_controller";
+import { RegisteredQueues } from "../../bull/queues";
+import { TaskRegistry } from "../../bull/task_registry";
 const ProfilePicture = new ProfilePictureController();
+
+import BullMessageQueueService from "../../bull/bull_service";
+const BullTasks = new BullMessageQueueService();
+
+import MarketingTasks from "../../bull/tasks/send_welcome_email_task";
+
+const MarketingTask = new MarketingTasks();
 
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
@@ -33,6 +42,20 @@ class ControllerServices {
       });
 
       const current_friend = await newFriend.save();
+
+      // fire welcome email task
+      await BullTasks.send_task(
+        RegisteredQueues.Marketing_Queue,
+        TaskRegistry.Send_Welcome_Email,
+        MarketingTask.send_welcome_email_task,
+        [
+          {
+            input_email: input.email,
+            user_name: input.firstName,
+          },
+        ],
+      );
+      //
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
