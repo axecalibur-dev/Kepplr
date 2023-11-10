@@ -7,7 +7,10 @@ import { TaskRegistry } from "../bull/task_registry";
 import SampleTasks from "../bull/tasks/sample_tasks";
 import { express_limiter } from "../data/rate_limit";
 import { TaskLogger } from "../models/task_logger";
+import ReportingService from "../reports/report_service";
 const Auth = new AuthMiddleware();
+
+const Report = new ReportingService();
 
 const BullTasks = new BullMessageQueueService();
 const ST = new SampleTasks();
@@ -28,6 +31,14 @@ router.post("/test_task", async (req, res) => {
   );
   return res.status(200).send({
     status: "OK",
+  });
+});
+
+router.get("/report", Auth.auth, async (req, res) => {
+  // console.log("Health Check");
+  const report = await Report.generate_user_report();
+  return res.status(200).send({
+    healthCheck: "OK",
   });
 });
 
