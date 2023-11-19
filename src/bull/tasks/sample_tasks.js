@@ -19,7 +19,7 @@ class SampleTasks {
   sample_db_population_task = async (args) => {
     // const decoded_token = Auth.build_token(current_friend).refresh_token;
     const currentFriend = await Friends.findOne({
-      email: "jai@gmail.com",
+      email: "jaibhattwebdev@gmail.com",
     });
     const memcached_connect = await Memcached.connect();
     for (let i = 0; i < parseInt(args[0]); i++) {

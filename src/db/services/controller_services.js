@@ -21,6 +21,7 @@ import MarketingTasks from "../../bull/tasks/send_welcome_email_task";
 import MemcachedService from "../../memcached/memcached_service";
 import { BlacklistedTokens } from "../schema/blacklistedTokens";
 import { Posts } from "../schema/posts";
+import jwt from "jsonwebtoken";
 
 const MarketingTask = new MarketingTasks();
 
@@ -66,7 +67,7 @@ class ControllerServices {
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
-    throw new GraphQLError("User for this eemail already exists.", {
+    throw new GraphQLError("User for this email already exists.", {
       extensions: {
         name: "ServiceException",
         status: HttpStatus.BAD_REQUEST,
@@ -198,6 +199,7 @@ class ControllerServices {
   };
   logout = async (parent, encoded_token, context, info) => {
     try {
+      const legitimate = jwt.verify(encoded_token, process.env.JWT_SECRET);
       const token = await BlacklistedTokens.findOne({
         token_string: encoded_token,
       });
@@ -218,7 +220,17 @@ class ControllerServices {
         };
       }
     } catch (err) {
-      console.log(err);
+      if (err instanceof jwt.JsonWebTokenError) {
+        throw new GraphQLError(
+          "Sorry we could not verify your identity please login and try again.",
+          {
+            extensions: {
+              name: "ServiceException",
+              status: HttpStatus.NOT_FOUND,
+            },
+          },
+        );
+      }
       throw new GraphQLError("Something went wrong.", {
         extensions: {
           name: "ServiceException",
