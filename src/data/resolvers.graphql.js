@@ -29,14 +29,14 @@ export const resolvers = {
       );
     },
 
-    // logout: async (parent, args, context, info) => {
-    //   return await Controller.logout(
-    //     parent,
-    //     auth.verifyToken(context.authorization),
-    //     context,
-    //     info,
-    //   );
-    // },
+    log_out: async (parent, args, context, info) => {
+      return await Controller.logout(
+        parent,
+        String(context.authorization),
+        context,
+        info,
+      );
+    },
 
     regenerate_token: async (parent, args, context, info) => {
       return await Controller.regenerate_token(

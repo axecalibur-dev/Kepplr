@@ -17,7 +17,7 @@ const blackListedToken = new mongoose.Schema(
 
     reason: {
       type: String,
-      default: "s",
+      default: "AUTOMATIC_TOKEN_EXPIRATION",
       required: true,
     },
   },
