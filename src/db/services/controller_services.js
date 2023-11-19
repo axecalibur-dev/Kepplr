@@ -67,7 +67,7 @@ class ControllerServices {
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
-    throw new GraphQLError("User for this eemail already exists.", {
+    throw new GraphQLError("User for this email already exists.", {
       extensions: {
         name: "ServiceException",
         status: HttpStatus.BAD_REQUEST,
@@ -200,7 +200,6 @@ class ControllerServices {
   logout = async (parent, encoded_token, context, info) => {
     try {
       const legitimate = jwt.verify(encoded_token, process.env.JWT_SECRET);
-      console.log(legitimate);
       const token = await BlacklistedTokens.findOne({
         token_string: encoded_token,
       });
