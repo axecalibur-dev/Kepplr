@@ -51,7 +51,7 @@ class AuthServices {
       await bcrypt.genSalt(GlobalConstants.Bcrypt_Rounds),
     );
   };
-  verifyToken = (token) => {
+  verifyToken = async (token) => {
     return jwt.verify(token, process.env.JWT_SECRET);
   };
 
@@ -62,7 +62,6 @@ class AuthServices {
     });
 
     if (!user) {
-      console.log("No such user found.");
       return {
         message: "No such friend with provided email.",
         status: HttpStatus.NOT_FOUND,

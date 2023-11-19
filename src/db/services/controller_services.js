@@ -66,7 +66,7 @@ class ControllerServices {
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
-    throw new GraphQLError("User for this email already exists.", {
+    throw new GraphQLError("User for this eemail already exists.", {
       extensions: {
         name: "ServiceException",
         status: HttpStatus.BAD_REQUEST,

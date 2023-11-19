@@ -116,6 +116,9 @@ class RelationshipController {
     // });
 
     // console.log("9");
+    // console.log("decoded_token");
+    // console.log(decoded_token);
+    // console.log("decoded_token");
 
     const existing = await Relationships.find({
       personA: decoded_token.friend_id,
