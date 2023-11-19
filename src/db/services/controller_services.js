@@ -21,6 +21,7 @@ import MarketingTasks from "../../bull/tasks/send_welcome_email_task";
 import MemcachedService from "../../memcached/memcached_service";
 import { BlacklistedTokens } from "../schema/blacklistedTokens";
 import { Posts } from "../schema/posts";
+import jwt from "jsonwebtoken";
 
 const MarketingTask = new MarketingTasks();
 
@@ -198,6 +199,8 @@ class ControllerServices {
   };
   logout = async (parent, encoded_token, context, info) => {
     try {
+      const legitimate = jwt.verify(encoded_token, process.env.JWT_SECRET);
+      console.log(legitimate);
       const token = await BlacklistedTokens.findOne({
         token_string: encoded_token,
       });
@@ -218,7 +221,17 @@ class ControllerServices {
         };
       }
     } catch (err) {
-      console.log(err);
+      if (err instanceof jwt.JsonWebTokenError) {
+        throw new GraphQLError(
+          "Sorry we could not verify your identity please login and try again.",
+          {
+            extensions: {
+              name: "ServiceException",
+              status: HttpStatus.NOT_FOUND,
+            },
+          },
+        );
+      }
       throw new GraphQLError("Something went wrong.", {
         extensions: {
           name: "ServiceException",
