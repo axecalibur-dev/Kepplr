@@ -149,12 +149,21 @@ const typeDefs = gql`
     data: [Friend]
     meta: JSON_Object
   }
+  input PeopleIFollowDTO {
+    page: Int
+    page_size: Int
+  }
 
+  type LogoutResponse {
+    message: String
+    status: String
+  }
   type Query {
     regenerate_token: SignupResponse
     profile: QueryFriendResponse
-    people_i_follow: RelationshipResponse
+    people_i_follow(input: PeopleIFollowDTO): RelationshipResponse
     people_who_follow_me: RelationshipResponse
+    log_out: LogoutResponse
   }
 
   input PostTweetDTO {

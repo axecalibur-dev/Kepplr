@@ -19,6 +19,8 @@ const BullTasks = new BullMessageQueueService();
 
 import MarketingTasks from "../../bull/tasks/send_welcome_email_task";
 import MemcachedService from "../../memcached/memcached_service";
+import { BlacklistedTokens } from "../schema/blacklistedTokens";
+import { Posts } from "../schema/posts";
 
 const MarketingTask = new MarketingTasks();
 
@@ -64,7 +66,7 @@ class ControllerServices {
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
-    throw new GraphQLError("User for this email already exists.", {
+    throw new GraphQLError("User for this eemail already exists.", {
       extensions: {
         name: "ServiceException",
         status: HttpStatus.BAD_REQUEST,
@@ -186,6 +188,37 @@ class ControllerServices {
         };
       }
     } catch (err) {
+      throw new GraphQLError("Something went wrong.", {
+        extensions: {
+          name: "ServiceException",
+          status: HttpStatus.NOT_FOUND,
+        },
+      });
+    }
+  };
+  logout = async (parent, encoded_token, context, info) => {
+    try {
+      const token = await BlacklistedTokens.findOne({
+        token_string: encoded_token,
+      });
+
+      if (token == null) {
+        const blacklisted = new BlacklistedTokens({
+          token_string: encoded_token,
+        });
+        await blacklisted.save();
+        return {
+          message: "Logged out successfully.",
+          status: HttpStatus.OK,
+        };
+      } else {
+        return {
+          message: "Logged out successfully.",
+          status: HttpStatus.OK,
+        };
+      }
+    } catch (err) {
+      console.log(err);
       throw new GraphQLError("Something went wrong.", {
         extensions: {
           name: "ServiceException",

@@ -43,23 +43,6 @@ class SampleTasks {
       });
 
       await relation.save();
-      const people_i_follow = await Relationships.find({
-        personA: currentFriend.id,
-      });
-
-      // const people_who_follow_me = await Relationships.find({
-      //   personB: currentFriend.id,
-      // });
-
-      const people_i_follow_count = people_i_follow.length;
-      // const people_who_follow_me_count = people_who_follow_me.length;
-
-      const user_id = currentFriend.id;
-      const relationshipCount = {
-        people_i_follow_count: people_i_follow_count,
-        people_who_follow_me_count: 0,
-      };
-      memcached_connect.set(user_id, relationshipCount, 0, (err) => {});
 
       const makePost = new Posts({
         post_string: "Sample Post",
@@ -67,6 +50,23 @@ class SampleTasks {
       });
       await makePost.save();
     }
+    const people_i_follow = await Relationships.find({
+      personA: currentFriend.id,
+    });
+
+    // const people_who_follow_me = await Relationships.find({
+    //   personB: currentFriend.id,
+    // });
+
+    const people_i_follow_count = people_i_follow.length;
+    // const people_who_follow_me_count = people_who_follow_me.length;
+
+    const user_id = currentFriend.id;
+    const relationshipCount = {
+      people_i_follow_count: people_i_follow_count,
+      people_who_follow_me_count: 0,
+    };
+    memcached_connect.set(user_id, relationshipCount, 0, (err) => {});
     return true;
   };
 }

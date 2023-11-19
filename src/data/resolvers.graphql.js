@@ -15,6 +15,7 @@ import { getGraphQLRateLimiter } from "graphql-rate-limit";
 import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";
 import { rate_limit_requests } from "./rate_limit";
+import { BlacklistedTokens } from "../db/schema/blacklistedTokens";
 const rateLimiter = getGraphQLRateLimiter({ identifyContext: (ctx) => ctx.id });
 
 const auth = new AuthServices();
@@ -23,7 +24,16 @@ export const resolvers = {
     profile: async (parent, args, context, info) => {
       return await Controller.getOneUserByID(
         parent,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
+        context,
+        info,
+      );
+    },
+
+    log_out: async (parent, args, context, info) => {
+      return await Controller.logout(
+        parent,
+        String(context.authorization),
         context,
         info,
       );
@@ -32,19 +42,34 @@ export const resolvers = {
     regenerate_token: async (parent, args, context, info) => {
       return await Controller.regenerate_token(
         parent,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
         context,
         info,
       );
     },
 
     people_i_follow: async (parent, args, context, info) => {
+      const blacklisted = await BlacklistedTokens.findOne({
+        token_string: context.authorization,
+      });
+
+      if (blacklisted) {
+        throw new GraphQLError(
+          "We could not verify your identify please login again.",
+          {
+            extensions: {
+              name: "ServiceException",
+              status: HttpStatus.BAD_REQUEST,
+            },
+          },
+        );
+      }
       return await RelationshipController.people_i_follow(
         parent,
         args,
         context,
         info,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
       );
     },
 
@@ -54,7 +79,7 @@ export const resolvers = {
         args,
         context,
         info,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
       );
     },
   },
@@ -103,7 +128,7 @@ export const resolvers = {
         args,
         context,
         info,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
       );
     },
 
@@ -113,7 +138,7 @@ export const resolvers = {
         args,
         context,
         info,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
       );
     },
 
@@ -127,7 +152,7 @@ export const resolvers = {
         args,
         context,
         info,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
       );
     },
     // unfollow someone
@@ -138,7 +163,7 @@ export const resolvers = {
         args,
         context,
         info,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
       );
     },
 
@@ -152,7 +177,7 @@ export const resolvers = {
         args,
         context,
         info,
-        auth.verifyToken(context.authorization),
+        await auth.verifyToken(context.authorization),
       );
     },
   },

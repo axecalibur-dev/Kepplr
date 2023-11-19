@@ -6,7 +6,7 @@ services:
       args:
         NODE_ENV: development
     volumes:
-      - ./:/app:ro
+      - ./:/app
       - /app/node_modules
     env_file:
       - ./.env

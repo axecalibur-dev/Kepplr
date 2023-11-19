@@ -66,17 +66,17 @@ async function startServer() {
 
 startServer()
   .then(() => {
-    Slack.send_to_slack(
-      "Server Startup OK 🚀",
-      `Server has started successfully of environment: ${process.env.NODE_ENV} ✅ `,
-      HttpStatus.OK,
-    )
-      .then(() => {
-        console.log("Slack running and communicating. ✅ ");
-      })
-      .catch((err) => {
-        console.error("Slack failed ❌", err);
-      });
+    // Slack.send_to_slack(
+    //   "Server Startup OK 🚀",
+    //   `Server has started successfully of environment: ${process.env.NODE_ENV} ✅ `,
+    //   HttpStatus.OK,
+    // )
+    //   .then(() => {
+    //     console.log("Slack running and communicating. ✅ ");
+    //   })
+    //   .catch((err) => {
+    //     console.error("Slack failed ❌", err);
+    //   });
   })
   .catch((err) => {
     console.error("Server startup failed ❌", err);
