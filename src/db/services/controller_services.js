@@ -19,6 +19,7 @@ const BullTasks = new BullMessageQueueService();
 
 import MarketingTasks from "../../bull/tasks/send_welcome_email_task";
 import MemcachedService from "../../memcached/memcached_service";
+import { BlacklistedTokens } from "../schema/blacklistedTokens";
 
 const MarketingTask = new MarketingTasks();
 
@@ -187,6 +188,34 @@ class ControllerServices {
       }
     } catch (err) {
       throw new GraphQLError("Something went wrong.", {
+        extensions: {
+          name: "ServiceException",
+          status: HttpStatus.NOT_FOUND,
+        },
+      });
+    }
+  };
+  logout = async (parent, decoded_token, context, info) => {
+    try {
+      const token = await BlacklistedTokens.findOne({
+        token_string: decoded_token,
+      });
+
+      if (token == null)
+        return {
+          message: "No data found",
+          status: HttpStatus.NOT_FOUND,
+          meta: {},
+        };
+      else {
+        return {
+          message: "Logout completed OK.",
+          status: HttpStatus.OK,
+          meta: {},
+        };
+      }
+    } catch (err) {
+      throw new GraphQLError("Something went OK.", {
         extensions: {
           name: "ServiceException",
           status: HttpStatus.NOT_FOUND,

@@ -3,7 +3,9 @@ import xlsx from "xlsx";
 
 class ReportingService {
   generate_user_report = async () => {
-    const users = await Friends.find().populate("_id firstName lastName email");
+    const users = await Friends.find()
+      .populate("_id firstName lastName email")
+      .lean();
 
     const workBook = xlsx.utils.book_new();
     const data = users.map((user) => ({

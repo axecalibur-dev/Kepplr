@@ -8,12 +8,16 @@ import SampleTasks from "../bull/tasks/sample_tasks";
 import { express_limiter } from "../data/rate_limit";
 import { TaskLogger } from "../models/task_logger";
 import ReportingService from "../reports/report_service";
+import CloudinaryService from "../cloudinary/cloudinary";
 const Auth = new AuthMiddleware();
 
 const Report = new ReportingService();
 
 const BullTasks = new BullMessageQueueService();
 const ST = new SampleTasks();
+
+const Cloud = new CloudinaryService();
+
 router.get("/health", Auth.auth, async (req, res) => {
   // console.log("Health Check");
 
@@ -39,6 +43,15 @@ router.get("/report", Auth.auth, async (req, res) => {
   const report = await Report.generate_user_report();
   return res.status(200).send({
     healthCheck: "OK",
+  });
+});
+
+router.get("/upload", Auth.auth, async (req, res) => {
+  // console.log("Health Check");
+  const filePath = await Cloud.upload_to_cloudinary(req);
+  console.log(filePath);
+  return res.status(200).send({
+    healthCheck: "filePath  ",
   });
 });
 

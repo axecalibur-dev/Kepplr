@@ -29,6 +29,15 @@ export const resolvers = {
       );
     },
 
+    // logout: async (parent, args, context, info) => {
+    //   return await Controller.logout(
+    //     parent,
+    //     auth.verifyToken(context.authorization),
+    //     context,
+    //     info,
+    //   );
+    // },
+
     regenerate_token: async (parent, args, context, info) => {
       return await Controller.regenerate_token(
         parent,
