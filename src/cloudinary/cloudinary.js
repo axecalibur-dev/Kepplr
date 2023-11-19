@@ -3,9 +3,9 @@ import multer from "multer";
 class CloudinaryService {
   upload_to_cloudinary = async (req) => {
     cloudinary.config({
-      cloud_name: "dtmq9wa1d",
-      api_key: "629858856521668",
-      api_secret: "cPR2NEnpkonpAhTvAJNC-h2Idvc",
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUD_API_KEY,
+      api_secret: process.env.CLOUD_API_SECRET,
     });
 
     const storage = multer.memoryStorage();
