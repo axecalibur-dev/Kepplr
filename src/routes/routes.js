@@ -49,9 +49,8 @@ router.get("/report", Auth.auth, async (req, res) => {
 router.get("/upload", Auth.auth, async (req, res) => {
   // console.log("Health Check");
   const filePath = await Cloud.upload_to_cloudinary(req);
-  console.log(filePath);
   return res.status(200).send({
-    healthCheck: "filePath  ",
+    filePath: filePath,
   });
 });
 
