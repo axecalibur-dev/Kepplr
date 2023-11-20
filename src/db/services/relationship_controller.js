@@ -123,7 +123,7 @@ class RelationshipController {
     const existing = await Relationships.find({
       personA: decoded_token.friend_id,
     })
-      .populate("personB", " -_id firstName email lastName")
+      .populate("personB", "_id firstName email lastName")
       .sort("-created_at")
       .skip((input.page - 1) * input["page_size"]) // Skip documents for previous pages
       .limit(input["page_size"]); // Limit the number of documents for the current page
