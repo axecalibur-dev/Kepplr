@@ -108,22 +108,10 @@ class RelationshipController {
   };
 
   people_i_follow = async (parent, { input }, context, info, decoded_token) => {
-    // const memcached_connect = await Memcached.connect();
-    // let some_value = {};
-    // memcached_connect.get(decoded_token.friend_id, (err, data) => {
-    //   some_value["f"] = data;
-    //   console.log("8");
-    // });
-
-    // console.log("9");
-    // console.log("decoded_token");
-    // console.log(decoded_token);
-    // console.log("decoded_token");
-
     const existing = await Relationships.find({
       personA: decoded_token.friend_id,
     })
-      .populate("personB", " -_id firstName email lastName")
+      .populate("personB", "_id firstName email lastName profile_picture")
       .sort("-created_at")
       .skip((input.page - 1) * input["page_size"]) // Skip documents for previous pages
       .limit(input["page_size"]); // Limit the number of documents for the current page
@@ -152,18 +140,19 @@ class RelationshipController {
     info,
     decoded_token,
   ) => {
-    // console.log(decoded_token);
-    // check if self following, reject
-
     const existing = await Relationships.find({
       personB: decoded_token.friend_id,
-    }).populate("personA", " -_id firstName email lastName");
+    })
+      .populate("personA", "_id firstName email lastName")
+      .sort("-created_at")
+      .skip((input.page - 1) * input["page_size"]) // Skip documents for previous pages
+      .limit(input["page_size"]); // Limit the number of documents for the current page
 
     console.log(existing);
     if (existing.length === 0) {
       return APIResponse.relationship_response("0 people follow you..", {});
     } else {
-      const followers = existing.map((relationship) => relationship.personB);
+      const followers = existing.map((relationship) => relationship.personA);
       // console.log(followers);
       return APIResponse.relationship_response(
         `You are being followed by ${existing.length} people.`,

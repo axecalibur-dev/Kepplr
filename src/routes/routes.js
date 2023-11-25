@@ -9,6 +9,7 @@ import { express_limiter } from "../data/rate_limit";
 import { TaskLogger } from "../models/task_logger";
 import ReportingService from "../reports/report_service";
 import CloudinaryService from "../cloudinary/cloudinary";
+import { Friends } from "../db/schema/friendSchema";
 const Auth = new AuthMiddleware();
 
 const Report = new ReportingService();
@@ -51,6 +52,38 @@ router.get("/upload", Auth.auth, async (req, res) => {
   const filePath = await Cloud.upload_to_cloudinary(req);
   return res.status(200).send({
     filePath: filePath,
+  });
+});
+
+router.get("/api1", (req, res) => {
+  console.log("API 1 HIT");
+  let i = 0;
+  for (i = 0; i <= 5000000; i++) {
+    // Your code here
+    console.log(i); // Example: Log the current iteration value to the console
+  }
+
+  return res.status(200).send({
+    healthCheck: i,
+  });
+});
+router.get("/api2", async (req, res) => {
+  console.log("API 2 HIT");
+  const friends = await Friends.aggregate([
+    {
+      $group: {
+        _id: "$isPrivateAccount",
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+
+  console.log(friends);
+
+  return res.status(200).send({
+    healthCheck: "OK",
   });
 });
 

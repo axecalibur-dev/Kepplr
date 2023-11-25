@@ -27,9 +27,10 @@ class SampleTasks {
       const newFriend = new Friends({
         firstName: `Jai_${i}`,
         lastName: `Jai_${i}`,
-        gender: `Jai_${i}`,
+        gender: `Others`,
         language: `Jai_${i}`,
         age: 20 + i,
+        isPrivateAccount: true,
         email: `Jai_${i}_${Math.random()}`,
         contacts: `Jai_${i}`,
         password: `Jai_${i}`,
