@@ -149,7 +149,7 @@ const typeDefs = gql`
     data: [Friend]
     meta: JSON_Object
   }
-  input PeopleIFollowDTO {
+  input FollowerFollowingDTO {
     page: Int
     page_size: Int
   }
@@ -161,8 +161,8 @@ const typeDefs = gql`
   type Query {
     regenerate_token: SignupResponse
     profile: QueryFriendResponse
-    people_i_follow(input: PeopleIFollowDTO): RelationshipResponse
-    people_who_follow_me: RelationshipResponse
+    people_i_follow(input: FollowerFollowingDTO): RelationshipResponse
+    people_who_follow_me(input: FollowerFollowingDTO): RelationshipResponse
     log_out: LogoutResponse
   }
 
