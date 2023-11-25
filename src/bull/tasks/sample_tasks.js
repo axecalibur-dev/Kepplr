@@ -34,7 +34,7 @@ class SampleTasks {
         email: `Jai_${i}_${Math.random()}`,
         contacts: `Jai_${i}`,
         password: `Jai_${i}`,
-        profile_picture: "noimagee",
+        profile_picture: "noimagee2",
       });
 
       const current_friend = await newFriend.save();
@@ -42,8 +42,13 @@ class SampleTasks {
         personA: currentFriend.id,
         personB: current_friend.id,
       });
-
       await relation.save();
+      const relation2 = new Relationships({
+        personA: current_friend.id,
+        personB: currentFriend.id,
+      });
+
+      await relation2.save();
 
       const makePost = new Posts({
         post_string: "Sample Post",

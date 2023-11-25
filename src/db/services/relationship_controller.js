@@ -143,19 +143,20 @@ class RelationshipController {
     const existing = await Relationships.find({
       personB: decoded_token.friend_id,
     })
-      .populate("personA", "_id firstName email lastName")
+      .populate("personA", "_id firstName email lastName profile_picture")
       .sort("-created_at")
       .skip((input.page - 1) * input["page_size"]) // Skip documents for previous pages
       .limit(input["page_size"]); // Limit the number of documents for the current page
 
-    console.log(existing);
-    if (existing.length === 0) {
+    const some_value = await Relationships.countDocuments({
+      personB: decoded_token.friend_id,
+    });
+    if (some_value.length === 0) {
       return APIResponse.relationship_response("0 people follow you..", {});
     } else {
       const followers = existing.map((relationship) => relationship.personA);
-      // console.log(followers);
       return APIResponse.relationship_response(
-        `You are being followed by ${existing.length} people.`,
+        `You are being followed by ${some_value} people.`,
         {},
         followers,
       );
