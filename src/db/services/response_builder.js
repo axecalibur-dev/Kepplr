@@ -2,7 +2,7 @@ import HttpStatus from "http-status-codes";
 import AuthServices from "./auth/auth_services";
 const Auth = new AuthServices();
 class APIResponseBuilder {
-  auth_response = async (message, current_friend, meta) => {
+  auth_response = (message, current_friend, meta) => {
     //
     return {
       message: message || "Success",
@@ -23,7 +23,7 @@ class APIResponseBuilder {
   //   };
   // };
 
-  relationship_response = async (message, meta, data) => {
+  relationship_response = (message, meta, data) => {
     // console.log("data");
     // console.log(data);
     // console.log("data");
@@ -35,15 +35,23 @@ class APIResponseBuilder {
     };
   };
 
-  tweet_response = async (message, meta) => {
+  tweet_response = (message, meta) => {
     return {
       message: message || "Success",
       status: HttpStatus.OK,
-      meta: meta,
+      meta: meta || {},
     };
   };
 
-  feed_response = async (message, meta, data) => {
+  favourite_response = (message, status, count) => {
+    return {
+      message: message || "Success",
+      status: status || HttpStatus.OK,
+      count: count,
+    };
+  };
+
+  feed_response = (message, meta, data) => {
     // console.log("data");
     // console.log(data);
     // console.log("data");

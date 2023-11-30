@@ -16,12 +16,19 @@ import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";
 import { rate_limit_requests } from "./rate_limit";
 import { BlacklistedTokens } from "../db/schema/blacklistedTokens";
+import AuthMiddleware from "../db/services/auth/auth_middleware";
 const rateLimiter = getGraphQLRateLimiter({ identifyContext: (ctx) => ctx.id });
 
 const auth = new AuthServices();
+const authMiddleware = new AuthMiddleware();
 export const resolvers = {
   Query: {
     profile: async (parent, args, context, info) => {
+      const blacklisted = await BlacklistedTokens.findOne({
+        token_string: context.authorization,
+      });
+
+      await authMiddleware.checkBlacklisted(context);
       return await Controller.getOneUserByID(
         parent,
         await auth.verifyToken(context.authorization),
@@ -49,21 +56,7 @@ export const resolvers = {
     },
 
     people_i_follow: async (parent, args, context, info) => {
-      const blacklisted = await BlacklistedTokens.findOne({
-        token_string: context.authorization,
-      });
-
-      if (blacklisted) {
-        throw new GraphQLError(
-          "We could not verify your identify please login again.",
-          {
-            extensions: {
-              name: "ServiceException",
-              status: HttpStatus.BAD_REQUEST,
-            },
-          },
-        );
-      }
+      await authMiddleware.checkBlacklisted(context);
       return await RelationshipController.people_i_follow(
         parent,
         args,
@@ -74,6 +67,7 @@ export const resolvers = {
     },
 
     people_who_follow_me: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
       return await RelationshipController.people_who_follow_me(
         parent,
         args,
@@ -111,18 +105,25 @@ export const resolvers = {
     },
 
     updateFriend: async (parent, args) => {
+      await authMiddleware.checkBlacklisted(context);
       return await Controller.update_user(parent, args);
     },
 
     // company specific routes
 
     add_company: async (parent, args, context, info) => {
+      const blacklisted = await BlacklistedTokens.findOne({
+        token_string: context.authorization,
+      });
+
+      await authMiddleware.checkBlacklisted(context);
       return await CompanyController.create_new_company(parent, args);
     },
 
     // tweet specific routes
 
     post_tweet: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
       return await TweetController.post_a_new_tweet(
         parent,
         args,
@@ -132,7 +133,42 @@ export const resolvers = {
       );
     },
 
+    edit_tweet: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
+      return await TweetController.edit_tweet(
+        parent,
+        args,
+        context,
+        info,
+        await auth.verifyToken(context.authorization),
+      );
+    },
+    like_tweet: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
+      console.log(args);
+      return await TweetController.like_tweet(
+        parent,
+        args,
+        context,
+        info,
+        await auth.verifyToken(context.authorization),
+      );
+    },
+
+    dislike_tweet: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
+      console.log(args);
+      return await TweetController.dislike_tweet(
+        parent,
+        args,
+        context,
+        info,
+        await auth.verifyToken(context.authorization),
+      );
+    },
+
     delete_tweet: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
       return await TweetController.delete_tweet(
         parent,
         args,
@@ -147,6 +183,7 @@ export const resolvers = {
     // follow_someone
 
     follow_someone: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
       return await RelationshipController.follow_someone(
         parent,
         args,
@@ -158,6 +195,7 @@ export const resolvers = {
     // unfollow someone
 
     unfollow_someone: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
       return await RelationshipController.unfollow_someone(
         parent,
         args,
@@ -172,6 +210,7 @@ export const resolvers = {
 
     // feed specific routes
     home: async (parent, args, context, info) => {
+      await authMiddleware.checkBlacklisted(context);
       return await HomeController.get_home_feed(
         parent,
         args,

@@ -10,6 +10,8 @@ import { TaskLogger } from "../models/task_logger";
 import ReportingService from "../reports/report_service";
 import CloudinaryService from "../cloudinary/cloudinary";
 import { Friends } from "../db/schema/friendSchema";
+import build from "../scripts/build";
+import ScriptingService from "../scripts/build";
 const Auth = new AuthMiddleware();
 
 const Report = new ReportingService();
@@ -19,6 +21,8 @@ const ST = new SampleTasks();
 
 const Cloud = new CloudinaryService();
 
+const Script = new ScriptingService();
+
 router.get("/health", Auth.auth, async (req, res) => {
   // console.log("Health Check");
 
@@ -27,13 +31,26 @@ router.get("/health", Auth.auth, async (req, res) => {
   });
 });
 
-router.post("/test_task", async (req, res) => {
+router.post("/populate", async (req, res) => {
   await BullTasks.send_task(
     RegisteredQueues.Fault_Tolerance,
     TaskRegistry.Sample_Db_Population,
     ST.sample_db_population_task,
     [req.body["records"]],
   );
+  return res.status(200).send({
+    status: "OK",
+  });
+});
+
+router.post("/build", async (req, res) => {
+  if (!req.body["emails"]) {
+    return res.status(200).send({
+      message: "Emails array not passed in body.",
+      status: "Fail",
+    });
+  }
+  const script = await Script.build(req);
   return res.status(200).send({
     status: "OK",
   });

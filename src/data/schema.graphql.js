@@ -14,11 +14,12 @@ const typeDefs = gql`
   }
 
   type Friend {
-    id: ID
+    _id: ID
     firstName: String
     lastName: String
-    gender: Gender
+    gender: String
     profile_picture: String
+    username_handle: String
     language: String
     age: Int
     email: String
@@ -27,7 +28,7 @@ const typeDefs = gql`
   }
 
   type Post {
-    id: ID
+    _id: ID
     created_at: String
     updated_at: String
     friend: Friend
@@ -38,7 +39,7 @@ const typeDefs = gql`
   }
 
   type Company {
-    id: ID
+    _id: ID
     company_name: String!
     email: String!
     building: String!
@@ -55,7 +56,7 @@ const typeDefs = gql`
   }
 
   input FriendRequestDTO {
-    id: ID
+    _id: ID
     firstName: String
     lastName: String
     gender: Gender
@@ -70,6 +71,7 @@ const typeDefs = gql`
     lastName: String!
     password: String!
     company: String!
+    username_handle: String!
     profile_picture: String
     gender: Gender
     language: String
@@ -102,11 +104,11 @@ const typeDefs = gql`
   }
 
   input Identity {
-    id: ID
+    _id: ID
   }
 
   input LoginDTO {
-    email: String!
+    identity: String!
     password: String!
   }
 
@@ -209,6 +211,21 @@ const typeDefs = gql`
     page_size: Int
   }
 
+  input FavouriteDTO {
+    tweet_id: ID
+  }
+
+  type FavoriteResponse {
+    count: Int
+    message: String
+    status: String
+  }
+
+  input EditPostDTO {
+    tweet_id: ID
+    post_string: String
+  }
+
   type Mutation {
     updateFriend(input: FriendRequestDTO): MutationFriendResponse
     sign_up(input: SignupDTO): SignupResponse
@@ -221,6 +238,9 @@ const typeDefs = gql`
     follow_someone(input: FollowDTO): FollowResponse
     unfollow_someone(input: FollowDTO): FollowResponse
     home(input: HomeDTO): FeedCollectiveResponse
+    like_tweet(input: FavouriteDTO): FavoriteResponse
+    dislike_tweet(input: FavouriteDTO): FavoriteResponse
+    edit_tweet(input: EditPostDTO): TweetResponse
   }
 `;
 

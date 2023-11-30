@@ -30,7 +30,7 @@ const Memcached = new MemcachedService();
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
     const current_user = await Friends.findOne({
-      email: input.email,
+      $or: [{ email: input.email }, { username_handle: input.username_handle }],
     });
 
     if (!current_user) {
@@ -39,6 +39,7 @@ class ControllerServices {
         lastName: input.lastName,
         gender: input.gender,
         language: input.language,
+        username_handle: input.username_handle,
         age: input.age,
         profile_picture: await ProfilePicture.default_profile_picture(),
         company: input.company,
@@ -61,13 +62,10 @@ class ControllerServices {
           },
         ],
       );
-      //
-
-      // console.log(memcached);
       return APIResponse.auth_response("Sign Up Success", current_friend, {});
     }
 
-    throw new GraphQLError("User for this email already exists.", {
+    throw new GraphQLError(`User for these credentials already exists.`, {
       extensions: {
         name: "ServiceException",
         status: HttpStatus.BAD_REQUEST,
@@ -77,11 +75,11 @@ class ControllerServices {
 
   login_user = async (parent, { input }, context, info) => {
     const current_user = await Friends.findOne({
-      email: input.email,
+      $or: [{ email: input.identity }, { username_handle: input.identity }],
     });
 
     if (!current_user) {
-      throw new GraphQLError("User for this email was not found.", {
+      throw new GraphQLError("User for this identity was not found.", {
         extensions: {
           name: "ServiceException",
           status: HttpStatus.NOT_FOUND,
@@ -181,6 +179,9 @@ class ControllerServices {
           meta: {},
         };
       else {
+        if (!current_friends.sharePrimaryContactEmail) {
+          current_friends["email"] = null;
+        }
         return {
           message: "Friend found",
           status: HttpStatus.OK,
