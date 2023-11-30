@@ -17,6 +17,13 @@ const friendSchema = new mongoose.Schema(
       required: false,
       ref: "Company",
     },
+
+    username_handle: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+
     isPrivateAccount: {
       type: Boolean,
       required: true,

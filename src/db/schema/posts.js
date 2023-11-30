@@ -18,9 +18,16 @@ const postSchema = new mongoose.Schema(
     post_string: {
       type: String,
       required: true,
+      maxLength: ["200", "Post cannot have more than 200 characters."],
     },
 
     likes: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    dislikes: {
       type: Number,
       required: true,
       default: 0,
