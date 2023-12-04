@@ -49,14 +49,30 @@ class ControllerServices {
       });
 
       const current_friend = await newFriend.save();
+      console.log(current_friend);
       /// MIGRATION TO POSTGRES
+      // console.log();
       const punchUser = await Users.create({
         firstName: input.firstName,
         lastName: input.lastName,
         username_handle: input.username_handle,
         email: input.email,
         password: await Auth.hash_password(input.password),
+        profile_picture: await ProfilePicture.default_profile_picture(),
       });
+
+      // const getUser = await Users.findOne({
+      //   where: {
+      //     email: "antartica@gmail.com",
+      //   },
+      // });
+      //
+      // if (getUser) {
+      //   console.log("ANTARTICA FOUND");
+      //   console.log(getUser.id);
+      //   console.log("ANTARTICA FOUND");
+      // }
+
       /// MIGRATION TO POSTGRES
 
       // fire welcome email task
