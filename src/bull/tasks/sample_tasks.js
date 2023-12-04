@@ -35,6 +35,11 @@ class SampleTasks {
         contacts: `Jai_${i}`,
         password: `Jai_${i}`,
         profile_picture: "noimagee2",
+        username_handle: `Jai____>${
+          Math.floor(Math.random() * 9999981) + 20
+        }_____${Math.floor(Math.random() * 9999981) + 20}_____${
+          Math.floor(Math.random() * 9999981) + 20
+        }`,
       });
 
       const current_friend = await newFriend.save();

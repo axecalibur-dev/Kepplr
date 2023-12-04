@@ -70,7 +70,6 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     password: String!
-    company: String!
     username_handle: String!
     profile_picture: String
     gender: Gender

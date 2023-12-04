@@ -1,6 +1,9 @@
 import { Friends } from "../db/schema/friendSchema";
 import { Relationships } from "../db/schema/relationship";
 import { Posts } from "../db/schema/posts";
+import AuthServices from "../db/services/auth/auth_services";
+import { Users } from "../models/users";
+const Auth = new AuthServices();
 
 class ScriptingService {
   build = async (request) => {
@@ -31,13 +34,17 @@ class ScriptingService {
         lastName: `Sharma`,
         gender: `Others`,
         language: `Chinese`,
-        username_handle: `Jai_iop}`,
+        username_handle: `Jai____>${
+          Math.floor(Math.random() * 9999981) + 20
+        }_____${Math.floor(Math.random() * 9999981) + 20}_____${
+          Math.floor(Math.random() * 9999981) + 20
+        }`,
         age: 20 + i,
         isPrivateAccount: false,
         email: persons[i],
         contacts: `Jai_${i}`,
-        password: `Jai_${i}`,
-        profile_picture: "noimagee2",
+        password: await Auth.hash_password("password"),
+        profile_picture: "noimagee212",
       });
 
       const current_friend = await newFriend.save();
@@ -62,6 +69,8 @@ class ScriptingService {
         friend: current_friend.id,
       });
       await makePost.save();
+
+      // Migration to Postgres
     }
   };
 }

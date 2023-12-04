@@ -22,6 +22,7 @@ import MemcachedService from "../../memcached/memcached_service";
 import { BlacklistedTokens } from "../schema/blacklistedTokens";
 import { Posts } from "../schema/posts";
 import jwt from "jsonwebtoken";
+import { Users } from "../../models/users";
 
 const MarketingTask = new MarketingTasks();
 
@@ -42,13 +43,21 @@ class ControllerServices {
         username_handle: input.username_handle,
         age: input.age,
         profile_picture: await ProfilePicture.default_profile_picture(),
-        company: input.company,
         email: input.email,
         contacts: input.contacts,
         password: await Auth.hash_password(input.password),
       });
 
       const current_friend = await newFriend.save();
+      /// MIGRATION TO POSTGRES
+      const punchUser = await Users.create({
+        firstName: input.firstName,
+        lastName: input.lastName,
+        username_handle: input.username_handle,
+        email: input.email,
+        password: await Auth.hash_password(input.password),
+      });
+      /// MIGRATION TO POSTGRES
 
       // fire welcome email task
       await BullTasks.send_task(
