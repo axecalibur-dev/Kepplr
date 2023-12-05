@@ -22,28 +22,27 @@ export const connect_to_databases = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Atlas connection established. 💽");
+    console.log("Mongodb connection established. 💽");
   } catch (error) {
-    console.error("DB Connection Failed ❌", error);
+    console.error("Mongodb Connection Failed ❌", error);
     process.exit(1); // Exit the application on DB connection failure
   }
 
   try {
     await sequelize.authenticate();
-    console.log("Postgres connection OK. 💽");
+    console.log("Postgres Connection established. 💽");
   } catch (error) {
     console.error("Postgres Connection Failed ❌", error);
     process.exit(1); // Exit the application on DB connection failure
   }
 
-  sequelize
-    .sync()
-    .then(() => {
-      console.log("Database and tables synced.");
-    })
-    .catch((error) => {
-      console.error("Error syncing database:", error);
-    });
+  // sequelize
+  //   .then(() => {
+  //     console.log("Connection with Postgres established.");
+  //   })
+  //   .catch((error) => {
+  //     console.error("Postgres connection failure.", error);
+  //   });
 };
 
 // Export the Sequelize instance

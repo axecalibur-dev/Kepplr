@@ -89,10 +89,4 @@ export const Users = sequelize.define("Users", {
     allowNull: false,
     defaultValue: {},
   },
-
-  system_hash_value: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: "defaulthash",
-  },
 });
