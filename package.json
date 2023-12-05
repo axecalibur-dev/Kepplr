@@ -44,6 +44,7 @@
     "pm2": "^5.3.0",
     "redis": "^4.6.8",
     "sequelize": "^6.33.0",
+    "typeorm": "^0.3.17",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
