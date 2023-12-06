@@ -23,6 +23,7 @@ import { BlacklistedTokens } from "../schema/blacklistedTokens";
 import { Posts } from "../schema/posts";
 import jwt from "jsonwebtoken";
 import { Users } from "../../models/users";
+import { Op } from "sequelize";
 
 const MarketingTask = new MarketingTasks();
 
@@ -30,12 +31,16 @@ const Memcached = new MemcachedService();
 
 class ControllerServices {
   sign_up_user = async (parent, { input }) => {
-    const current_user = await Friends.findOne({
-      $or: [{ email: input.email }, { username_handle: input.username_handle }],
+    const current_user = await Users.findOne({
+      where: {
+        [Op.or]: [
+          { email: input.email },
+          { username_handle: input.username_handle },
+        ],
+      },
     });
-
     if (!current_user) {
-      const newFriend = new Friends({
+      const current_friend = await Users.create({
         firstName: input.firstName,
         lastName: input.lastName,
         gender: input.gender,
@@ -47,33 +52,6 @@ class ControllerServices {
         contacts: input.contacts,
         password: await Auth.hash_password(input.password),
       });
-
-      const current_friend = await newFriend.save();
-      console.log(current_friend);
-      /// MIGRATION TO POSTGRES
-      // console.log();
-      const punchUser = await Users.create({
-        firstName: input.firstName,
-        lastName: input.lastName,
-        username_handle: input.username_handle,
-        email: input.email,
-        password: await Auth.hash_password(input.password),
-        profile_picture: await ProfilePicture.default_profile_picture(),
-      });
-
-      // const getUser = await Users.findOne({
-      //   where: {
-      //     email: "antartica@gmail.com",
-      //   },
-      // });
-      //
-      // if (getUser) {
-      //   console.log("ANTARTICA FOUND");
-      //   console.log(getUser.id);
-      //   console.log("ANTARTICA FOUND");
-      // }
-
-      /// MIGRATION TO POSTGRES
 
       // fire welcome email task
       await BullTasks.send_task(
@@ -99,8 +77,13 @@ class ControllerServices {
   };
 
   login_user = async (parent, { input }, context, info) => {
-    const current_user = await Friends.findOne({
-      $or: [{ email: input.identity }, { username_handle: input.identity }],
+    const current_user = await Users.findOne({
+      where: {
+        [Op.or]: [
+          { email: input.identity },
+          { username_handle: input.identity },
+        ],
+      },
     });
 
     if (!current_user) {
@@ -136,7 +119,11 @@ class ControllerServices {
         },
       );
     }
-    const current_user = await Friends.findById(decoded_token.friend_id);
+    const current_user = await Users.findOne({
+      where: {
+        id: decoded_token.user_id,
+      },
+    });
     if (!current_user) {
       throw new GraphQLError("User for this token was not found.", {
         extensions: {
@@ -147,54 +134,14 @@ class ControllerServices {
     }
     return APIResponse.auth_response("Tokens Refresh", current_user, {});
   };
-  update_user = async (parent, { input }) => {
-    try {
-      const current_friend = await Friends.findByIdAndUpdate(
-        { _id: input.id },
-        {
-          firstName: input.firstName,
-          lastName: input.lastName,
-          gender: input.gender,
-          language: input.language,
-          age: input.age,
-          email: input.email,
-          updated_at: Date.now,
-          contacts: input.contacts,
-        },
-
-        { new: true },
-      );
-
-      if (!current_friend) {
-        return {
-          message: "No such friend with provided ID.",
-          status: HttpStatus.NOT_FOUND,
-          data: null,
-          meta: {},
-        };
-      } else {
-        return {
-          message: "Friend Updated.",
-          status: HttpStatus.OK,
-          data: current_friend,
-          meta: {},
-        };
-      }
-    } catch (err) {
-      return {
-        message: `An exception occurred.`,
-        status: HttpStatus.BAD_REQUEST,
-        data: null,
-        meta: {},
-      };
-    }
-  };
 
   getOneUserByID = async (parent, decoded_token, context, info) => {
     try {
-      const current_friends = await Friends.findById({
-        _id: decoded_token.friend_id,
-      }).populate("company");
+      const current_friends = await Users.findOne({
+        where: {
+          id: decoded_token.user_id,
+        },
+      });
 
       if (current_friends == null)
         return {
