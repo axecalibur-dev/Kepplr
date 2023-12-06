@@ -9,7 +9,6 @@ export const mongo_connect_string = () => {
 export const postgres_connect_string = () => {
   return `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`;
 };
-
 // Define the Sequelize instance
 const sequelize = new Sequelize(postgres_connect_string(), {
   logging: false,
@@ -36,13 +35,14 @@ export const connect_to_databases = async () => {
     process.exit(1); // Exit the application on DB connection failure
   }
 
-  // sequelize
-  //   .then(() => {
-  //     console.log("Connection with Postgres established.");
-  //   })
-  //   .catch((error) => {
-  //     console.error("Postgres connection failure.", error);
-  //   });
+  sequelize
+    .sync()
+    .then(() => {
+      console.log("Connection with Postgres established.");
+    })
+    .catch((error) => {
+      console.error("Postgres connection failure.", error);
+    });
 };
 
 // Export the Sequelize instance
