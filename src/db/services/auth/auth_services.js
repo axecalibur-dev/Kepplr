@@ -20,7 +20,7 @@ class AuthServices {
       {
         token_type: "Bearer/Access",
         email: user.email,
-        friend_id: user.id,
+        user_id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
       },
@@ -32,7 +32,7 @@ class AuthServices {
       {
         token_type: "Refresh",
         email: user.email,
-        friend_id: user.id,
+        user_id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
       },

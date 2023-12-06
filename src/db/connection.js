@@ -9,7 +9,6 @@ export const mongo_connect_string = () => {
 export const postgres_connect_string = () => {
   return `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`;
 };
-
 // Define the Sequelize instance
 const sequelize = new Sequelize(postgres_connect_string(), {
   logging: false,
@@ -22,15 +21,15 @@ export const connect_to_databases = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Atlas connection established. 💽");
+    console.log("Mongodb connection established. 💽");
   } catch (error) {
-    console.error("DB Connection Failed ❌", error);
+    console.error("Mongodb Connection Failed ❌", error);
     process.exit(1); // Exit the application on DB connection failure
   }
 
   try {
     await sequelize.authenticate();
-    console.log("Postgres connection OK. 💽");
+    console.log("Postgres Connection established. 💽");
   } catch (error) {
     console.error("Postgres Connection Failed ❌", error);
     process.exit(1); // Exit the application on DB connection failure
@@ -39,10 +38,10 @@ export const connect_to_databases = async () => {
   sequelize
     .sync()
     .then(() => {
-      console.log("Database and tables synced.");
+      console.log("Connection with Postgres established.");
     })
     .catch((error) => {
-      console.error("Error syncing database:", error);
+      console.error("Postgres connection failure.", error);
     });
 };
 

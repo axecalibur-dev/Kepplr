@@ -18,14 +18,10 @@ export const Users = sequelize.define("Users", {
     defaultValue: Date.now,
   },
 
-  email: {
+  username_handle: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-  },
-
-  password: {
-    type: DataTypes.STRING,
   },
 
   firstName: {
@@ -38,9 +34,59 @@ export const Users = sequelize.define("Users", {
     allowNull: false,
   },
 
-  username_handle: {
+  profile_picture: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: "#noimage",
+  },
+
+  email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+  },
+
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+  isPrivateAccount: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+
+  sharePrimaryContactEmail: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+
+  gender: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+
+  age: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+
+  language: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+
+  registration_source: {
+    type: DataTypes.ENUM("Google", "Facebook", "Email"),
+    allowNull: false,
+    defaultValue: "Email",
+  },
+
+  oAuthCredentials: {
+    type: DataTypes.JSON,
+    allowNull: false,
+    defaultValue: {},
   },
 });

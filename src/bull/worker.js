@@ -27,14 +27,14 @@ export const create_worker = async (
     },
   );
 
-  const task = await TaskLogger.create({
-    job_id: job_id,
-    queue_name: queue_name,
-    job_name: job_name,
-    args: {
-      arg: args,
-    },
-  });
+  // const task = await TaskLogger.create({
+  //   job_id: job_id,
+  //   queue_name: queue_name,
+  //   job_name: job_name,
+  //   args: {
+  //     arg: args,
+  //   },
+  // });
   console.log(`>> 🔄 👷 Workers Deployed for ${job_id}`);
 
   worker.on("error", (err) => {
