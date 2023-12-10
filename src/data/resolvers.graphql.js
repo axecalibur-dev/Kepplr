@@ -24,10 +24,6 @@ const authMiddleware = new AuthMiddleware();
 export const resolvers = {
   Query: {
     profile: async (parent, args, context, info) => {
-      const blacklisted = await BlacklistedTokens.findOne({
-        token_string: context.authorization,
-      });
-
       await authMiddleware.checkBlacklisted(context);
       return await Controller.getOneUserByID(
         parent,
@@ -104,22 +100,6 @@ export const resolvers = {
       return await auth.initiate_reset_password_service(parent, args);
     },
 
-    updateFriend: async (parent, args) => {
-      await authMiddleware.checkBlacklisted(context);
-      return await Controller.update_user(parent, args);
-    },
-
-    // company specific routes
-
-    add_company: async (parent, args, context, info) => {
-      const blacklisted = await BlacklistedTokens.findOne({
-        token_string: context.authorization,
-      });
-
-      await authMiddleware.checkBlacklisted(context);
-      return await CompanyController.create_new_company(parent, args);
-    },
-
     // tweet specific routes
 
     post_tweet: async (parent, args, context, info) => {
@@ -145,7 +125,6 @@ export const resolvers = {
     },
     like_tweet: async (parent, args, context, info) => {
       await authMiddleware.checkBlacklisted(context);
-      console.log(args);
       return await TweetController.like_tweet(
         parent,
         args,
@@ -157,7 +136,6 @@ export const resolvers = {
 
     dislike_tweet: async (parent, args, context, info) => {
       await authMiddleware.checkBlacklisted(context);
-      console.log(args);
       return await TweetController.dislike_tweet(
         parent,
         args,

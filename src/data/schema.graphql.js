@@ -14,7 +14,7 @@ const typeDefs = gql`
   }
 
   type Friend {
-    _id: ID
+    id: ID
     firstName: String
     lastName: String
     gender: String
@@ -28,7 +28,7 @@ const typeDefs = gql`
   }
 
   type Post {
-    _id: ID
+    id: ID
     created_at: String
     updated_at: String
     friend: Friend
@@ -39,7 +39,7 @@ const typeDefs = gql`
   }
 
   type Company {
-    _id: ID
+    id: ID
     company_name: String!
     email: String!
     building: String!
@@ -56,7 +56,7 @@ const typeDefs = gql`
   }
 
   input FriendRequestDTO {
-    _id: ID
+    id: ID
     firstName: String
     lastName: String
     gender: Gender
@@ -103,7 +103,7 @@ const typeDefs = gql`
   }
 
   input Identity {
-    _id: ID
+    id: ID
   }
 
   input LoginDTO {

@@ -1,8 +1,6 @@
-import { Friends } from "../db/schema/friendSchema";
-import { Relationships } from "../db/schema/relationship";
-import { Posts } from "../db/schema/posts";
 import AuthServices from "../db/services/auth/auth_services";
 import { Users } from "../models/users";
+import { Relationships } from "../models/relationships";
 const Auth = new AuthServices();
 
 class ScriptingService {
@@ -23,13 +21,15 @@ class ScriptingService {
     // persons.push(person2)
     // persons.push(person3)
 
-    const currentFriend = await Friends.findOne({
-      email: superuser,
+    const currentFriend = await Users.findOne({
+      where: {
+        email: superuser,
+      },
     });
 
     // return
     for (let i = 0; i < persons.length; i++) {
-      const newFriend = new Friends({
+      const newFriend = Users.build({
         firstName: persons[i].slice(0, 4),
         lastName: `Sharma`,
         gender: `Others`,
@@ -41,8 +41,7 @@ class ScriptingService {
         }`,
         age: 20 + i,
         isPrivateAccount: false,
-        email: persons[i],
-        contacts: `Jai_${i}`,
+        email: `${persons[i]}@gmail.com`,
         password: await Auth.hash_password("password"),
         profile_picture: "noimagee212",
       });
@@ -50,7 +49,7 @@ class ScriptingService {
       const current_friend = await newFriend.save();
 
       if (persons[i] !== "american@kepplr.xyz") {
-        const relation = new Relationships({
+        const relation = Relationships.build({
           personA: currentFriend.id,
           personB: current_friend.id,
         });
@@ -64,11 +63,11 @@ class ScriptingService {
       //
       // await relation2.save();
 
-      const makePost = new Posts({
-        post_string: "Sample Post",
-        friend: current_friend.id,
-      });
-      await makePost.save();
+      // const makePost = new Posts({
+      //   post_string: "Sample Post",
+      //   friend: current_friend.id,
+      // });
+      // await makePost.save();
 
       // Migration to Postgres
     }
