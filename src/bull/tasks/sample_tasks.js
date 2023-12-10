@@ -34,7 +34,7 @@ class SampleTasks {
         age: 20 + i,
         isPrivateAccount: true,
         email: `Jai_${i}_${Math.random()}`,
-        password: await Auth.hash_password("password"),
+        password: "pwd",
         profile_picture: "noimagee2",
         username_handle: `Jai____>${
           Math.floor(Math.random() * 9999981) + 20
