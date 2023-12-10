@@ -130,8 +130,13 @@ class RelationshipController {
       offset: (input["page"] - 1) * input["page_size"], // Calculate the offset based on the page number
       limit: input["page_size"],
     });
+    const count = await Relationships.count({
+      where: {
+        personA: decoded_token.user_id,
+      },
+    });
 
-    if (existing.length === 0) {
+    if (count === 0) {
       return APIResponse.relationship_response(
         "You are following 0 people.",
         {},
@@ -141,7 +146,7 @@ class RelationshipController {
         (relationship) => relationship["personBData"],
       );
       return APIResponse.relationship_response(
-        `You are following ${existing.length} people.`,
+        `You are following ${count} people.`,
         {},
         followers,
       );
@@ -171,7 +176,12 @@ class RelationshipController {
       limit: input["page_size"],
     });
 
-    if (existing.length === 0) {
+    const count = await Relationships.count({
+      where: {
+        personB: decoded_token.user_id,
+      },
+    });
+    if (count === 0) {
       return APIResponse.relationship_response(
         "You are being followed by 0 people.",
         {},
@@ -181,7 +191,7 @@ class RelationshipController {
         (relationship) => relationship["personAData"],
       );
       return APIResponse.relationship_response(
-        `You are being followed by ${existing.length} people.`,
+        `You are being followed by ${count} people.`,
         {},
         followers,
       );
