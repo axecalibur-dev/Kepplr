@@ -1,5 +1,4 @@
 import { Posts } from "../schema/posts";
-import { Relationships } from "../schema/relationship";
 import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";
 import APIResponseBuilder from "./response_builder";
@@ -8,6 +7,8 @@ import { TaskRegistry } from "../../bull/task_registry";
 import BullMessageQueueService from "../../bull/bull_service";
 import CachingTasks from "../../bull/tasks/set_relationship_count_memcached";
 import MemcachedService from "../../memcached/memcached_service";
+import { Relationships } from "../../models/relationships";
+import { Users } from "../../models/users";
 
 const APIResponse = new APIResponseBuilder();
 
@@ -21,7 +22,7 @@ class RelationshipController {
     // console.log(decoded_token);
     // check if self following, reject
 
-    if (String(decoded_token.friend_id) === String(input["now_following_id"])) {
+    if (String(decoded_token.user_id) === String(input["now_following_id"])) {
       throw new GraphQLError("You cannot follow yourself.", {
         extensions: {
           name: "ServiceException",
@@ -31,8 +32,10 @@ class RelationshipController {
     }
 
     const existing = await Relationships.findOne({
-      personA: decoded_token.friend_id,
-      personB: input["now_following_id"],
+      where: {
+        personA: decoded_token.user_id,
+        personB: input["now_following_id"],
+      },
     });
     if (existing) {
       throw new GraphQLError("You are already following this person.", {
@@ -43,23 +46,23 @@ class RelationshipController {
       });
     }
 
-    const relationship = new Relationships({
-      personA: decoded_token.friend_id,
+    const relationship = Relationships.build({
+      personA: decoded_token.user_id,
       personB: input["now_following_id"],
     });
 
     const relation = await relationship.save();
     console.log(relation.id);
-    await BullTasks.send_task(
-      RegisteredQueues.Memcached_Queue,
-      TaskRegistry.Set_Relationship_Count_Memcached,
-      Caching.set_relationship_count_memcached,
-      [
-        {
-          decoded_token: decoded_token,
-        },
-      ],
-    );
+    // await BullTasks.send_task(
+    //   RegisteredQueues.Memcached_Queue,
+    //   TaskRegistry.Set_Relationship_Count_Memcached,
+    //   Caching.set_relationship_count_memcached,
+    //   [
+    //     {
+    //       decoded_token: decoded_token,
+    //     },
+    //   ],
+    // );
     // console.log(existing);
     return APIResponse.relationship_response(
       "You are now following this person",
@@ -108,25 +111,33 @@ class RelationshipController {
   };
 
   people_i_follow = async (parent, { input }, context, info, decoded_token) => {
-    const existing = await Relationships.find({
-      personA: decoded_token.friend_id,
-    })
-      .populate("personB", "_id firstName email lastName profile_picture")
-      .sort("-created_at")
-      .skip((input.page - 1) * input["page_size"]) // Skip documents for previous pages
-      .limit(input["page_size"]); // Limit the number of documents for the current page
-    const some_value = await Relationships.countDocuments({
-      personA: decoded_token.friend_id,
+    const existing = await Relationships.findAll({
+      where: {
+        personA: decoded_token.user_id,
+      },
+
+      include: [
+        {
+          model: Users,
+          as: "personBData", // Alias for the nested user data related to personA
+          foreignKey: "personB", // Specify the foreign key relationship
+        },
+      ],
+      offset: (input["page"] - 1) * input["page_size"], // Calculate the offset based on the page number
+      limit: input["page_size"],
     });
-    if (some_value.length === 0) {
+
+    if (existing.length === 0) {
       return APIResponse.relationship_response(
         "You are following 0 people.",
         {},
       );
     } else {
-      const followers = existing.map((relationship) => relationship.personB);
+      const followers = existing.map(
+        (relationship) => relationship["personBData"],
+      );
       return APIResponse.relationship_response(
-        `You are following ${some_value} people.`,
+        `You are following ${existing.length} people.`,
         {},
         followers,
       );
@@ -140,23 +151,33 @@ class RelationshipController {
     info,
     decoded_token,
   ) => {
-    const existing = await Relationships.find({
-      personB: decoded_token.friend_id,
-    })
-      .populate("personA", "_id firstName email lastName profile_picture")
-      .sort("-created_at")
-      .skip((input.page - 1) * input["page_size"]) // Skip documents for previous pages
-      .limit(input["page_size"]); // Limit the number of documents for the current page
+    const existing = await Relationships.findAll({
+      where: {
+        personB: decoded_token.user_id,
+      },
 
-    const some_value = await Relationships.countDocuments({
-      personB: decoded_token.friend_id,
+      include: [
+        {
+          model: Users,
+          as: "personAData", // Alias for the nested user data related to personA
+          foreignKey: "personA", // Specify the foreign key relationship
+        },
+      ],
+      offset: (input["page"] - 1) * input["page_size"], // Calculate the offset based on the page number
+      limit: input["page_size"],
     });
-    if (some_value.length === 0) {
-      return APIResponse.relationship_response("0 people follow you..", {});
-    } else {
-      const followers = existing.map((relationship) => relationship.personA);
+
+    if (existing.length === 0) {
       return APIResponse.relationship_response(
-        `You are being followed by ${some_value} people.`,
+        "You are being followed by 0 people.",
+        {},
+      );
+    } else {
+      const followers = existing.map(
+        (relationship) => relationship["personAData"],
+      );
+      return APIResponse.relationship_response(
+        `You are being followed by ${existing.length} people.`,
         {},
         followers,
       );

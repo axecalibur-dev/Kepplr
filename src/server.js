@@ -14,6 +14,7 @@ import { resolvers } from "./data/resolvers.graphql";
 import { expressMiddleware } from "@apollo/server/express4";
 import { connect_to_databases } from "./db/connection";
 import { get_app } from "./app";
+import build_sequelize_associations from "./models/associations";
 
 const Slack = new SlackService();
 const ApolloException = new ExceptionResponseBuilder();
@@ -59,6 +60,7 @@ async function startServer() {
     console.log(
       `Kepplr ( REST ) :: Build Type: ${process.env.NODE_ENV} :: at http://localhost:${process.env.PORT}${GlobalConstants.REST_Endpoint} 🌐`,
     );
+    build_sequelize_associations();
   });
 
   await connect_to_databases();

@@ -9,6 +9,7 @@ import BullMessageQueueService from "../../../bull/bull_service";
 import ServiceTasks from "../../../bull/tasks/send_password_recovery_task";
 import { redisService } from "../../../redis/redis";
 import { Friends } from "../../schema/friendSchema";
+import { Users } from "../../../models/users";
 
 const utils = new Utils();
 const BullTasks = new BullMessageQueueService();
@@ -57,8 +58,10 @@ class AuthServices {
 
   reset_password = async (parent, { input }) => {
     const system_otp = await utils.generateRandomOTP();
-    const user = await Friends.findOne({
-      email: input.email,
+    const user = await Users.findOne({
+      where: {
+        email: input.email,
+      },
     });
 
     if (!user) {
@@ -100,8 +103,8 @@ class AuthServices {
 
   initiate_reset_password_service = async (parent, { input }) => {
     const redis = await redisService();
-    const otp = await redis.get(String(input.email));
-    if (!otp || otp !== input.password_request_otp) {
+    const otp = await redis.get(String(input["email"]));
+    if (!otp || otp !== input["password_request_otp"]) {
       return {
         message: "Invalid OTP. Please try again or resend OTP.",
         status: HttpStatus.BAD_REQUEST,
@@ -111,14 +114,11 @@ class AuthServices {
     }
     const auth = new AuthServices();
     if (input["new_password"] === input["reenter_password"]) {
-      const user = await Friends.findOneAndUpdate(
-        {
+      const user = await Users.findOne({
+        where: {
           email: input.email,
         },
-        {
-          password: await auth.hash_password(input["new_password"]),
-        },
-      );
+      });
 
       if (!user) {
         return {
@@ -128,7 +128,10 @@ class AuthServices {
           meta: {},
         };
       } else {
-        await redis.del(String(input.email));
+        await user.update({
+          password: await auth.hash_password(input["new_password"]),
+        });
+        await redis.del(String(input["email"]));
         return {
           message: "Password Updated",
           status: HttpStatus.OK,
