@@ -125,7 +125,6 @@ export const resolvers = {
     },
     like_tweet: async (parent, args, context, info) => {
       await authMiddleware.checkBlacklisted(context);
-      console.log(args);
       return await TweetController.like_tweet(
         parent,
         args,
@@ -137,7 +136,6 @@ export const resolvers = {
 
     dislike_tweet: async (parent, args, context, info) => {
       await authMiddleware.checkBlacklisted(context);
-      console.log(args);
       return await TweetController.dislike_tweet(
         parent,
         args,

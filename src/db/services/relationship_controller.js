@@ -80,7 +80,9 @@ class RelationshipController {
     // console.log(decoded_token);
     // check if self following, reject
 
-    if (String(decoded_token.friend_id) === String(input["now_following_id"])) {
+    if (
+      String(decoded_token["user_id"]) === String(input["now_following_id"])
+    ) {
       throw new GraphQLError("You cannot unfollow yourself.", {
         extensions: {
           name: "ServiceException",
@@ -89,9 +91,11 @@ class RelationshipController {
       });
     }
 
-    const existing = await Relationships.findOneAndDelete({
-      personA: decoded_token.friend_id,
-      personB: input["now_following_id"],
+    const existing = await Relationships.findOne({
+      where: {
+        personA: decoded_token.user_id,
+        personB: input["now_following_id"],
+      },
     });
 
     if (existing) {

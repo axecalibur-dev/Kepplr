@@ -2,8 +2,10 @@ import APIResponseBuilder from "./response_builder";
 import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";
 import { ObjectId } from "mongodb";
-import { PostActions } from "../schema/postActionSchema";
 import { Posts } from "../../models/posts";
+import { PostActions } from "../../models/postActions";
+import { Op } from "sequelize";
+import PostActionsConstants from "../../globals/constants/post_actions_constants";
 const APIResponse = new APIResponseBuilder();
 
 class TweetController {
@@ -22,7 +24,7 @@ class TweetController {
         },
       });
     }
-    const post = Posts.build({
+    const post = PostActions.build({
       post_string: input["tweet_string"],
       user: decoded_token.user_id,
     });
@@ -54,110 +56,111 @@ class TweetController {
       return APIResponse.tweet_response("Tweet deleted success", {});
     }
   };
-  like_tweet = async (parent, { input }, context, info, decoded_token) => {
-    const whetherPerformedAction = await PostActions.findOne({
-      post: input.tweet_id,
-      friend: decoded_token.friend_id,
-      action: {
-        $in: ["LIKED_POST", "DISLIKED_POST"],
-      },
-    });
-
-    if (whetherPerformedAction) {
-      return APIResponse.favourite_response(
-        "You have already performed action on this post.",
-        HttpStatus.OK,
-        0,
-      );
-    }
-
-    const post = await Posts.findOneAndUpdate(
-      {
-        _id: new ObjectId(input.tweet_id),
-      },
-      {
-        $inc: {
-          likes: 1,
-        },
-      },
-      {
-        new: true,
-      },
-    ).select("-_id likes");
-
-    if (!post) {
-      return APIResponse.favourite_response(
-        "No posts found.",
-        HttpStatus.NOT_FOUND,
-        0,
-      );
-    } else {
-      const performAction = new PostActions({
-        post: input.tweet_id,
-        friend: decoded_token.friend_id,
-        action: "LIKED_POST",
-      });
-
-      const performedAction = await performAction.save();
-
-      return APIResponse.favourite_response(
-        "Liked Post OK",
-        HttpStatus.OK,
-        post.likes,
-      );
-    }
-  };
-  dislike_tweet = async (parent, { input }, context, info, decoded_token) => {
-    const whetherPerformedAction = await PostActions.findOne({
-      post: input.tweet_id,
-      friend: decoded_token.friend_id,
-      action: {
-        $in: ["LIKED_POST", "DISLIKED_POST"],
-      },
-    });
-
-    if (whetherPerformedAction) {
-      return APIResponse.favourite_response(
-        "You have already performed action on this post.",
-        HttpStatus.OK,
-        0,
-      );
-    }
-    const post = await Posts.findOneAndUpdate(
-      {
-        _id: new ObjectId(input.tweet_id),
-      },
-      {
-        $inc: {
-          dislikes: 1,
-        },
-      },
-      {
-        new: true,
-      },
-    ).select("-_id dislikes");
-
-    if (!post) {
-      return APIResponse.favourite_response(
-        "No posts found.",
-        HttpStatus.NOT_FOUND,
-        0,
-      );
-    } else {
-      const performAction = new PostActions({
-        post: input.tweet_id,
-        friend: decoded_token.friend_id,
-        action: "DISLIKED_POST",
-      });
-
-      const performedAction = await performAction.save();
-      return APIResponse.favourite_response(
-        "Disliked Post OK",
-        HttpStatus.OK,
-        post.dislikes,
-      );
-    }
-  };
+  // like_tweet = async (parent, { input }, context, info, decoded_token) => {
+  //   const whetherPerformedAction = await PostActions.findOne({
+  //     where: {
+  //       post: input["tweet_id"],
+  //       user: decoded_token.user_id,
+  //       action: {
+  //         [Op.in]: [
+  //           PostActionsConstants.LIKED_TWEET,
+  //           PostActionsConstants.DISLIKED_TWEET,
+  //         ],
+  //       },
+  //     },
+  //   });
+  //
+  //   // console.log("ACTION");
+  //   // console.log(whetherPerformedAction);
+  //   // console.log("ACTION");
+  //   // return 0;
+  //   if (whetherPerformedAction) {
+  //     return APIResponse.favourite_response(
+  //       "You have already performed action on this post.",
+  //       HttpStatus.OK,
+  //       0,
+  //     );
+  //   }
+  //
+  //   const post = await Posts.findOne({
+  //     where: {
+  //       id: input["tweet_id"],
+  //     },
+  //   });
+  //
+  //   post.likes = po;
+  //
+  //   if (!post) {
+  //     return APIResponse.favourite_response(
+  //       "No posts found.",
+  //       HttpStatus.NOT_FOUND,
+  //       0,
+  //     );
+  //   } else {
+  //     const performAction = PostActions.build({
+  //       post: input.tweet_id,
+  //       friend: decoded_token.user_id,
+  //       action: "LIKED_POST",
+  //     });
+  //
+  //     const performedAction = await performAction.save();
+  //
+  //     return APIResponse.favourite_response(
+  //       "Liked Post OK",
+  //       HttpStatus.OK,
+  //       post.likes,
+  //     );
+  //   }
+  // };
+  // dislike_tweet = async (parent, { input }, context, info, decoded_token) => {
+  //   const whetherPerformedAction = await PostActions.findOne({
+  //     where: {
+  //       post: input["tweet_id"],
+  //       user: decoded_token.user_id,
+  //       action: {
+  //         [Op.in]: [
+  //           PostActionsConstants.LIKED_TWEET,
+  //           PostActionsConstants.DISLIKED_TWEET,
+  //         ],
+  //       },
+  //     },
+  //   });
+  //
+  //   if (whetherPerformedAction) {
+  //     return APIResponse.favourite_response(
+  //       "You have already performed action on this post.",
+  //       HttpStatus.OK,
+  //       0,
+  //     );
+  //   }
+  //   const post = await Posts.increment("dislikes", {
+  //     by: 1,
+  //     where: {
+  //       id: input.tweet_id,
+  //     },
+  //   });
+  //
+  //   if (!post) {
+  //     return APIResponse.favourite_response(
+  //       "No posts found.",
+  //       HttpStatus.NOT_FOUND,
+  //       0,
+  //     );
+  //   } else {
+  //     const performAction = PostActions.build({
+  //       post: input.tweet_id,
+  //       user: decoded_token.user_id,
+  //       action: "DISLIKED_POST",
+  //     });
+  //
+  //     const performedAction = await performAction.save();
+  //     return APIResponse.favourite_response(
+  //       "Disliked Post OK",
+  //       HttpStatus.OK,
+  //       post.dislikes,
+  //     );
+  //   }
+  // };
   retweet_tweet = async (parent, args, context, info) => {};
   edit_tweet = async (parent, { input }, context, info, decoded_token) => {
     if (input.post_string.length > 200) {
