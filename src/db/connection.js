@@ -41,7 +41,7 @@ export const connect_to_databases = async () => {
       console.log("Connection with Postgres established.");
     })
     .catch((error) => {
-      console.error("Postgres connection failure>.", error);
+      console.error("Postgres connection failure.", error);
     });
 };
 
