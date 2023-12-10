@@ -1,5 +1,6 @@
 import { Relationships } from "./relationships";
 import { Users } from "./users";
+import { Posts } from "./posts";
 
 const build_sequelize_associations = () => {
   console.log("Called");
@@ -23,5 +24,8 @@ const build_sequelize_associations = () => {
     as: "personBRelationships",
   });
 };
+
+Users.hasMany(Posts, { foreignKey: "user", as: "userPosts" });
+Posts.belongsTo(Users, { foreignKey: "user", as: "postData" });
 
 export default build_sequelize_associations;

@@ -1,9 +1,9 @@
-import { Posts } from "../schema/posts";
 import APIResponseBuilder from "./response_builder";
 import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";
 import { ObjectId } from "mongodb";
 import { PostActions } from "../schema/postActionSchema";
+import { Posts } from "../../models/posts";
 const APIResponse = new APIResponseBuilder();
 
 class TweetController {
@@ -14,7 +14,7 @@ class TweetController {
     info,
     decoded_token,
   ) => {
-    if (input.tweet_string.length > 200) {
+    if (input["tweet_string"].length > 200) {
       throw new GraphQLError("Post cannot be more than 200 characters.", {
         extensions: {
           name: "ServiceException",
@@ -22,9 +22,9 @@ class TweetController {
         },
       });
     }
-    const post = new Posts({
+    const post = Posts.build({
       post_string: input["tweet_string"],
-      friend: decoded_token.friend_id,
+      user: decoded_token.user_id,
     });
 
     const tweeted = await post.save();
@@ -32,9 +32,11 @@ class TweetController {
   };
   delete_tweet = async (parent, { input }, context, info, decoded_token) => {
     console.log(input);
-    const deleted = await Posts.findOneAndDelete({
-      _id: input["tweet_id"],
-      friend: decoded_token.friend_id,
+    const deleted = await Posts.findOne({
+      where: {
+        id: input["tweet_id"],
+        user: decoded_token.user_id,
+      },
     });
 
     if (!deleted) {
@@ -48,6 +50,7 @@ class TweetController {
         },
       );
     } else {
+      await deleted.destroy();
       return APIResponse.tweet_response("Tweet deleted success", {});
     }
   };
@@ -165,25 +168,20 @@ class TweetController {
         },
       });
     }
-    const post = await Posts.findOneAndUpdate(
-      {
-        _id: new ObjectId(input.tweet_id),
-        friend: new ObjectId(decoded_token.friend_id),
+    const post = await Posts.findOne({
+      where: {
+        id: input.tweet_id,
+        user: decoded_token.user_id,
       },
-      {
-        $set: {
-          post_string: input.post_string,
-        },
-      },
-      {
-        new: true,
-      },
-    );
+    });
 
     if (!post) {
       return APIResponse.tweet_response("You cannot perform this action.", {});
     }
 
+    post.update({
+      post_string: input["post_string"],
+    });
     return APIResponse.tweet_response("Post update success", post);
   };
 }
