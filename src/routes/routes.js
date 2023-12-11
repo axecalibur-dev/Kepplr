@@ -6,7 +6,6 @@ import { RegisteredQueues } from "../bull/queues";
 import { TaskRegistry } from "../bull/task_registry";
 import SampleTasks from "../bull/tasks/sample_tasks";
 import { express_limiter } from "../data/rate_limit";
-import { TaskLogger } from "../models/task_logger";
 import ReportingService from "../reports/report_service";
 import CloudinaryService from "../cloudinary/cloudinary";
 import build from "../scripts/build";
