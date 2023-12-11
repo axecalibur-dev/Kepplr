@@ -1,4 +1,3 @@
-import { Posts } from "../schema/posts";
 import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";
 import APIResponseBuilder from "./response_builder";
