@@ -8,7 +8,6 @@ import { TaskRegistry } from "../../../bull/task_registry";
 import BullMessageQueueService from "../../../bull/bull_service";
 import ServiceTasks from "../../../bull/tasks/send_password_recovery_task";
 import { redisService } from "../../../redis/redis";
-import { Friends } from "../../schema/friendSchema";
 import { Users } from "../../../models/users";
 
 const utils = new Utils();

@@ -2,15 +2,12 @@ import AuthServices from "../db/services/auth/auth_services";
 import ControllerServices from "../db/services/controller_services";
 const Controller = new ControllerServices();
 
-import CompanyControllers from "../db/services/company_controller";
 import RelationshipControllers from "../db/services/relationship_controller";
 import HomeControllers from "../db/services/feed_controller";
 import TweetControllers from "../db/services/tweet_controller";
-const CompanyController = new CompanyControllers();
 const TweetController = new TweetControllers();
 const RelationshipController = new RelationshipControllers();
 const HomeController = new HomeControllers();
-
 import { getGraphQLRateLimiter } from "graphql-rate-limit";
 import { GraphQLError } from "graphql/index";
 import HttpStatus from "http-status-codes";

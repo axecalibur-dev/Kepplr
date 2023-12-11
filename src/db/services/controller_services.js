@@ -8,7 +8,6 @@ const APIResponse = new APIResponseBuilder();
 const Slack = new SlackService();
 
 import { GraphQLError } from "graphql";
-import { Friends } from "../schema/friendSchema";
 import ProfilePictureController from "../../repository/media/profile_pictures/profile_picture_controller";
 import { RegisteredQueues } from "../../bull/queues";
 import { TaskRegistry } from "../../bull/task_registry";
@@ -20,7 +19,6 @@ const BullTasks = new BullMessageQueueService();
 import MarketingTasks from "../../bull/tasks/send_welcome_email_task";
 import MemcachedService from "../../memcached/memcached_service";
 import { BlacklistedTokens } from "../schema/blacklistedTokens";
-import { Posts } from "../schema/posts";
 import jwt from "jsonwebtoken";
 import { Users } from "../../models/users";
 import { Op } from "sequelize";

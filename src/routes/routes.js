@@ -9,7 +9,6 @@ import { express_limiter } from "../data/rate_limit";
 import { TaskLogger } from "../models/task_logger";
 import ReportingService from "../reports/report_service";
 import CloudinaryService from "../cloudinary/cloudinary";
-import { Friends } from "../db/schema/friendSchema";
 import build from "../scripts/build";
 import ScriptingService from "../scripts/build";
 const Auth = new AuthMiddleware();

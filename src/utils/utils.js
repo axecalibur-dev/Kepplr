@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { Friends } from "../db/schema/friendSchema";
 import { redisService } from "../redis/redis";
 class Utils {
   format_error_message = (error_message) => {
