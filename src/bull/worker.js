@@ -1,8 +1,9 @@
 import { Worker } from "bullmq";
 import { redisOptions } from "../redis/redis";
-import { TaskLogger } from "../models/task_logger";
 import { TaskRegistry } from "./task_registry";
 import { DataTypes } from "sequelize";
+import { TaskLogger } from "../db/schema/taskLogger";
+import TaskConstants from "../globals/constants/task_constants";
 
 export const create_worker = async (
   queue_name,
@@ -10,6 +11,7 @@ export const create_worker = async (
   args,
   job_id,
   job_name,
+  registry_id,
 ) => {
   const worker = new Worker(
     queue_name,
@@ -36,8 +38,12 @@ export const create_worker = async (
   //   },
   // });
   console.log(`>> 🔄 👷 Workers Deployed for ${job_id}`);
+  let task_result = TaskConstants.FIRED;
+  let error_string = "";
 
   worker.on("error", (err) => {
+    task_result = TaskConstants.FAILED;
+    error_string = err;
     console.log(
       `🔄 ⚠️  Job with SysID ${job.id} has encountered an error. Error : ${err}`,
     );
@@ -45,16 +51,26 @@ export const create_worker = async (
 
   worker.on("completed", async (job, result) => {
     await worker.close();
+    task_result = TaskConstants.SUCCESS;
+    error_string = "#NOERROR";
+
     console.log(
       `>> 🔄 ✅  Job with SysID ${job.id} has completed. The handler returned the following response : ${result}`,
     );
   });
 
   worker.on("failed", (job, err) => {
+    task_result = TaskConstants.FAILED;
+    error_string = err.message;
     console.log(
       `>> 🔄 ⭕  Job with SysID ${job.id} has failed with ${err.message}`,
     );
   });
 
+  const task = await TaskLogger.findByIdAndUpdate(registry_id, {
+    $set: {
+      updated_at: Date.now(),
+    },
+  });
   return worker;
 };
