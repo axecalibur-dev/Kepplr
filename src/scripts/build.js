@@ -46,30 +46,41 @@ class ScriptingService {
         profile_picture: "noimagee212",
       });
 
-      const current_friend = await newFriend.save();
+      try {
+        const current_friend = await newFriend.save();
 
-      if (persons[i] !== "american@kepplr.xyz") {
-        const relation = Relationships.build({
-          personA: currentFriend.id,
-          personB: current_friend.id,
-        });
-        await relation.save();
+        if (persons[i] !== "american@kepplr.xyz") {
+          const relation = Relationships.build({
+            personA: currentFriend.id,
+            personB: current_friend.id,
+          });
+          await relation.save();
+        }
+
+        // const relation2 = new Relationships({
+        //     personA: current_friend.id,
+        //     personB: currentFriend.id,
+        // });
+        //
+        // await relation2.save();
+
+        // const makePost = new Posts({
+        //   post_string: "Sample Post",
+        //   friend: current_friend.id,
+        // });
+        // await makePost.save();
+      } catch (error) {
+        console.log(`Build API Exception >> ${error}`);
+        // console.log("Exception Error Message");
+        // console.log(error.message?);
+        console.log("EXIT");
+
+        return 0;
       }
 
-      // const relation2 = new Relationships({
-      //     personA: current_friend.id,
-      //     personB: currentFriend.id,
-      // });
-      //
-      // await relation2.save();
-
-      // const makePost = new Posts({
-      //   post_string: "Sample Post",
-      //   friend: current_friend.id,
-      // });
-      // await makePost.save();
-
       // Migration to Postgres
+
+      return 1;
     }
   };
 }

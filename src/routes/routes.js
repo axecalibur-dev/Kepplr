@@ -49,16 +49,21 @@ router.post("/build", async (req, res) => {
     });
   }
   const script = await Script.build(req);
+  console.log("BUILD RESPONSE");
+  console.log(script);
   return res.status(200).send({
-    status: "OK",
+    status: script,
   });
 });
 
 router.get("/report", Auth.auth, async (req, res) => {
   // console.log("Health Check");
   const report = await Report.generate_user_report();
+  const secureURL = await Cloud.upload_to_cloudinary_from_project(
+    "output.xlsx",
+  );
   return res.status(200).send({
-    healthCheck: "OK",
+    securePath: secureURL.secure_url,
   });
 });
 
