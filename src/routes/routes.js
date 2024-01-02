@@ -58,12 +58,9 @@ router.post("/build", async (req, res) => {
 
 router.get("/report", Auth.auth, async (req, res) => {
   // console.log("Health Check");
-  const report = await Report.generate_user_report();
-  const secureURL = await Cloud.upload_to_cloudinary_from_project(
-    "output.xlsx",
-  );
+  const report = await Report.generate_system_wide_report();
   return res.status(200).send({
-    securePath: secureURL.secure_url,
+    filePath: report,
   });
 });
 
@@ -72,38 +69,6 @@ router.get("/upload", Auth.auth, async (req, res) => {
   const filePath = await Cloud.upload_to_cloudinary(req);
   return res.status(200).send({
     filePath: filePath,
-  });
-});
-
-router.get("/api1", (req, res) => {
-  console.log("API 1 HIT");
-  let i = 0;
-  for (i = 0; i <= 5000000; i++) {
-    // Your code here
-    console.log(i); // Example: Log the current iteration value to the console
-  }
-
-  return res.status(200).send({
-    healthCheck: i,
-  });
-});
-router.get("/api2", async (req, res) => {
-  console.log("API 2 HIT");
-  const friends = await Friends.aggregate([
-    {
-      $group: {
-        _id: "$isPrivateAccount",
-        count: {
-          $sum: 1,
-        },
-      },
-    },
-  ]);
-
-  console.log(friends);
-
-  return res.status(200).send({
-    healthCheck: "OK",
   });
 });
 

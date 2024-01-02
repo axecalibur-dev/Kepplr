@@ -161,5 +161,40 @@ class Utils {
       String(system_otp),
     );
   };
+
+  send_system_wide_report_via_mail = async (email_address, secureURL) => {
+    const transporter = await nodemailer.createTransport({
+      host: "smtppro.zoho.in",
+      auth: {
+        user: process.env.SERVICE_EMAIl,
+        pass: process.env.SERVICE_EMAIl_PWD,
+      },
+    });
+
+    const template = `<!DOCTYPE html>
+         <html lang="">
+          <head>
+            <title>Kepplr | System Wide Report </title>
+          </head>
+          <body>
+            <a href = ${secureURL}>Report</a>
+          </body>
+          </html>
+        `;
+
+    const mailOptions = {
+      from: process.env.SERVICE_EMAIl,
+      to: email_address,
+      subject: "Kepplr Password Assistance",
+      html: template,
+    };
+    try {
+      await transporter.sendMail(mailOptions);
+      return true; // Email sent successfully
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return false; // Failed to send email
+    }
+  };
 }
 export default Utils;

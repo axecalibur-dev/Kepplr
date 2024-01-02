@@ -84,7 +84,7 @@ class CloudinaryService {
               reject("Upload to Cloudinary failed?");
             }
             resolve(result);
-            console.log(result.secure_url);
+            // console.log(result.secure_url);
           },
         );
       });
